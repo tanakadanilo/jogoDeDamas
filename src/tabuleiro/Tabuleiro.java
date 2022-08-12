@@ -51,6 +51,6 @@ public class Tabuleiro {
     }
 
     public boolean posicaoExiste(Posicao p) {
-        return (p.posicaoX <= this.tamanhoHorizontal && p.posicaoy <= this.tamanhoVertical);
+        return (p.posicaoX <= this.tamanhoHorizontal && p.posicaoY <= this.tamanhoVertical);
     }
 }

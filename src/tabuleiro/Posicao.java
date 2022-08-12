@@ -11,11 +11,11 @@ package tabuleiro;
 public class Posicao {
 
     protected int posicaoX;
-    protected int posicaoy;
+    protected int posicaoY;
 
     public Posicao(int posicaoX, int posicaoy) {
         this.posicaoX = posicaoX;
-        this.posicaoy = posicaoy;
+        this.posicaoY = posicaoy;
     }
 
     public int getPosicaoX() {
@@ -26,12 +26,12 @@ public class Posicao {
         this.posicaoX = posicaoX;
     }
 
-    public int getPosicaoy() {
-        return posicaoy;
+    public int getPosicaoY() {
+        return posicaoY;
     }
 
-    public void setPosicaoy(int posicaoy) {
-        this.posicaoy = posicaoy;
+    public void setPosicaoY(int posicaoY) {
+        this.posicaoY = posicaoY;
     }
     
 }

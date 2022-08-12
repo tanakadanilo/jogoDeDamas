@@ -15,7 +15,12 @@ import tabuleiro.Tabuleiro;
 public class Peca {
 
     protected Posicao p;
-    private final Tabuleiro tabuleiro;
+    protected final Tabuleiro tabuleiro;
+
+    public Peca(int posicaoX, int PosicaoY, Tabuleiro tabuleiro) {
+        this.p = new Posicao(posicaoX, PosicaoY);
+        this.tabuleiro = tabuleiro;
+    }
 
     public Peca(Posicao p, Tabuleiro tabuleiro) {
         this.p = p;
@@ -35,11 +40,11 @@ public class Peca {
             throw new ExcecaoTabuleiro("A posição informada não existe");
         }
         this.p.setPosicaoX(posicaoX);
-        this.p.setPosicaoy(posicaoY);
+        this.p.setPosicaoY(posicaoY);
     }
 
     public void mover(Posicao p) throws ExcecaoTabuleiro {
-         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
+        if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
         }
         this.p = p;
