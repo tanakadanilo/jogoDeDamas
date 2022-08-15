@@ -15,18 +15,18 @@ import tabuleiro.Tabuleiro;
  */
 public class Peao extends Peca {
 
-    private final PecasPossiveis cor;// * cor do peão, não aceitar vazio
-
-    public Peao(Tabuleiro tabuleiro, PecasPossiveis cor, int posicaoX, int posicaoy) {
-        super(posicaoX, posicaoy, tabuleiro);
-        if (cor == PecasPossiveis.VAZIO) {
+    public Peao(Posicao p, Tabuleiro tabuleiro, Cor cor) {
+        super(p, tabuleiro, cor);
+        if (cor == Cor.VAZIO) {
             throw new IllegalStateException("Tentando criar uma peça no tabuleiro que não é nem branca nem preta");
         }
-        this.cor = cor;
     }
 
-    public PecasPossiveis getCor() {
-        return cor;
+    public Peao(int posicaoX, int posicaoY, Tabuleiro tabuleiro, Cor cor) {
+        super(posicaoX, posicaoY, tabuleiro, cor);
+        if (cor == Cor.VAZIO) {
+            throw new IllegalStateException("Tentando criar uma peça no tabuleiro que não é nem branca nem preta");
+        }
     }
 
     public void moverPeao(Posicao posicaoFinal) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
@@ -45,7 +45,7 @@ public class Peao extends Peca {
 
     public boolean[][] movimentosPossiveis() {
         boolean[][] movimentosPossiveis = new boolean[tabuleiro.getTamanhoHorizontal()][tabuleiro.getTamanhoVertical()];
-        if (this.cor == PecasPossiveis.BRANCO) {//  * gerando movimentos possiveis para uma peças brancas
+        if (this.cor == Cor.BRANCO) {//  * gerando movimentos possiveis para uma peças brancas
             if (podeMoverSemCapturar(true)) {// * pode mover pra direita sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] = true;
             }
@@ -77,7 +77,7 @@ public class Peao extends Peca {
     }
 
     public boolean posicaoEstaVazia(Posicao p) {
-        return ((tabuleiro.posicaoExiste(p)) && (tabuleiro.getCasas()[p.getPosicaoX()][p.getPosicaoY()] == PecasPossiveis.VAZIO));//    * posicao existe e não tem nenhuma peça nesta posição
+        return ((tabuleiro.posicaoExiste(p)) && (tabuleiro.getCasas()[p.getPosicaoX()][p.getPosicaoY()].getCor() == Cor.VAZIO));//    * posicao existe e não tem nenhuma peça nesta posição
     }
 
     public boolean podeMover() {
@@ -90,41 +90,41 @@ public class Peao extends Peca {
     public boolean podeMoverSemCapturar(boolean moverPraDireita) {
 
         if (moverPraDireita) {//    * mover pra direita
-            if (this.cor == PecasPossiveis.BRANCO) {//    * é uma peça branca
-                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] == PecasPossiveis.VAZIO;
+            if (this.cor == Cor.BRANCO) {//    * é uma peça branca
+                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1].getCor() == Cor.VAZIO;
             } else {//  * é uma peça preta
-                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1] == PecasPossiveis.VAZIO;
+                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1].getCor() == Cor.VAZIO;
             }
         } else {//    * mover pra esquerda
-            if (this.cor == PecasPossiveis.BRANCO) {//    * é uma peça branca
-                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() - 1] == PecasPossiveis.VAZIO;
+            if (this.cor == Cor.BRANCO) {//    * é uma peça branca
+                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() - 1].getCor() == Cor.VAZIO;
             } else {//  * é uma peça preta
-                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() + 1] == PecasPossiveis.VAZIO;
+                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() + 1].getCor() == Cor.VAZIO;
             }
         }
     }
 
     private boolean podeCapturarDireita() {
-        if (this.cor == PecasPossiveis.BRANCO) {
+        if (this.cor == Cor.BRANCO) {
             Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() - 1][posicaoFinal.getPosicaoY() + 1] == PecasPossiveis.PRETA//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] == PecasPossiveis.VAZIO;//  * não tem nenhuma peça na posição final
+            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() - 1][posicaoFinal.getPosicaoY() + 1].getCor() == Cor.PRETA//    * tem uma peça adversária nessa posicao
+                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
         } else {//    * é uma peça preta
             Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita inferior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1] == PecasPossiveis.BRANCO//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] == PecasPossiveis.VAZIO;//  * não tem nenhuma peça na posição final
+            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1].getCor() == Cor.BRANCO//    * tem uma peça adversária nessa posicao
+                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
         }
     }
 
     private boolean podeCapturarEsquerda() {
-        if (this.cor == PecasPossiveis.BRANCO) {
+        if (this.cor == Cor.BRANCO) {
             Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() + 1] == PecasPossiveis.PRETA//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] == PecasPossiveis.VAZIO;//  * não tem nenhuma peça na posição final
+            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() + 1].getCor() == Cor.PRETA//    * tem uma peça adversária nessa posicao
+                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
         } else {//    * é uma peça preta
             Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1] == PecasPossiveis.BRANCO//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] == PecasPossiveis.VAZIO;//  * não tem nenhuma peça na posição final
+            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1].getCor() == Cor.BRANCO//    * tem uma peça adversária nessa posicao
+                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
         }
     }
 }

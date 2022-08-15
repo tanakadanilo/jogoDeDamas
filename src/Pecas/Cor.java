@@ -8,7 +8,7 @@ package Pecas;
  *
  * @author tanak
  */
-public enum PecasPossiveis {
+public enum Cor {
 
     VAZIO, BRANCO, PRETA;
 }

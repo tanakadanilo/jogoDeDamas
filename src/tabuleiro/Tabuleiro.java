@@ -4,7 +4,8 @@
  */
 package tabuleiro;
 
-import Pecas.PecasPossiveis;
+import Pecas.Cor;
+import Pecas.Peca;
 
 /**
  *
@@ -14,12 +15,12 @@ public class Tabuleiro {
 
     private int tamanhoVertical;
     private int tamanhoHorizontal;
-    private PecasPossiveis[][] casas;
+    private Peca[][] casas;
 
     public Tabuleiro(int tamanhoVertical, int tamanhoHorizontal) {
         this.tamanhoVertical = tamanhoVertical;
         this.tamanhoHorizontal = tamanhoHorizontal;
-        this.casas = new PecasPossiveis[tamanhoVertical][tamanhoHorizontal];
+        this.casas = new Peca[tamanhoVertical][tamanhoHorizontal];
     }
 
     public int getTamanhoVertical() {
@@ -38,11 +39,11 @@ public class Tabuleiro {
         this.tamanhoHorizontal = tamanhoHorizontal;
     }
 
-    public PecasPossiveis[][] getCasas() {
+    public Peca[][] getCasas() {
         return casas;
     }
 
-    public void setCasas(PecasPossiveis[][] casas) {
+    public void setCasas(Peca[][] casas) {
         this.casas = casas;
     }
 
@@ -52,5 +53,18 @@ public class Tabuleiro {
 
     public boolean posicaoExiste(Posicao p) {
         return (p.posicaoX <= this.tamanhoHorizontal && p.posicaoY <= this.tamanhoVertical);
+    }
+
+    public void adicionaPeca(Peca peca) throws ExcecaoTabuleiro {
+        Posicao p = peca.getPosicao();
+        if (!posicaoExiste(p)) {
+            throw new ExcecaoTabuleiro("A posicao: " + p.getPosicaoX() + ", " + p.getPosicaoY() + " não existe");
+        }
+        casas[p.getPosicaoX()][p.getPosicaoY()] = peca;
+    }
+
+    public void moverPeca(Peca peca, Posicao posicaoFinal) {
+        casas[peca.getPosicao().getPosicaoX()][peca.getPosicao().getPosicaoY()] = null;
+        casas[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] = peca;
     }
 }

@@ -16,23 +16,30 @@ public class Peca {
 
     protected Posicao p;
     protected final Tabuleiro tabuleiro;
+    protected final Cor cor;// * cor do peão, não aceitar vazio
 
-    public Peca(Posicao p, Tabuleiro tabuleiro) {
+    public Peca(Posicao p, Tabuleiro tabuleiro, Cor cor) {
         this.p = p;
         this.tabuleiro = tabuleiro;
+        this.cor = cor;
     }
 
-    public Peca(int posicaoX, int posicaoY, Tabuleiro tabuleiro) {
+    public Peca(int posicaoX, int posicaoY, Tabuleiro tabuleiro, Cor cor) {
         this.p = new Posicao(posicaoX, posicaoY);
         this.tabuleiro = tabuleiro;
+        this.cor = cor;
     }
 
-    public Posicao getP() {
+    public Posicao getPosicao() {
         return p;
     }
 
     public void setP(Posicao p) {
         this.p = p;
+    }
+
+    public Cor getCor() {
+        return cor;
     }
 
     public void mover(int posicaoX, int posicaoY) throws ExcecaoTabuleiro {
@@ -47,6 +54,7 @@ public class Peca {
         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
         }
+        tabuleiro.moverPeca(this, p);
         this.p = p;
     }
 
