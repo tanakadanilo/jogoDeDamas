@@ -5,6 +5,7 @@
 package jogo;
 
 import Pecas.Cor;
+import Pecas.Peao;
 import Pecas.Peca;
 import tabuleiro.ExcecaoTabuleiro;
 import tabuleiro.Posicao;
@@ -20,12 +21,12 @@ public class Programa {
 
     public static void main(String[] args) throws ExcecaoTabuleiro {
         Posicao p = new Posicao(7, 7);
-        Peca vazia = new Peca(p, tabuleiro, Cor.BRANCO);
+        Peca vazia = new Peao(p, tabuleiro, Cor.BRANCO);
         tabuleiro.adicionaPeca(vazia);
         p = new Posicao(p.getPosicaoX() - 1, p.getPosicaoY() - 1);
-        vazia.mover(p);
+        ((Peao) vazia).mover(p);
         p = new Posicao(p.getPosicaoX() - 1, p.getPosicaoY() - 1);
-        vazia.mover(p);
+        ((Peao) vazia).mover(p);
 
         Peca[][] casas = tabuleiro.getCasas();
         int cont = 0;
