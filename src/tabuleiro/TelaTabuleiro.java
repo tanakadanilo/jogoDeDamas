@@ -26,6 +26,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     ArrayList<JButton> listaBotoes = new ArrayList<>();
     Tabuleiro tabuleiro = new Tabuleiro(8, 8);
+    Peca pecaCapturada = null;
+    boolean mover = false;
+    int posicaoInicial;
 
     /**
      * Creates new form NewJFrame
@@ -35,18 +38,29 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         mostraTabuleiro();
         preencheTabuleiro();
         montaPecas();
+    }
 
+    private void mover(int inicio, int fim) {
+        pecaCapturada = tabuleiro.getCasas()[fim / 10][fim % 10];
+        tabuleiro.getCasas()[fim / 10][fim % 10] = tabuleiro.getCasas()[inicio / 10][inicio % 10];
+        tabuleiro.getCasas()[inicio / 10][inicio % 10] = null;
+        this.mover = false;
+        montaPecas();
     }
 
     private void montaPecas() {
-        listaBotoes.get(57).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto.png"));
         Peca[][] casas = tabuleiro.getCasas();
         for (var linha : casas) {
             for (var casa : linha) {
                 if (casa != null) {
                     if (casa.getCor() == Cor.BRANCO) {
                         Posicao p = casa.getPosicao();
-                        listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));;
+                        listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));
+                    } else {
+                        if (casa.getCor() == Cor.PRETA) {
+                            Posicao p = casa.getPosicao();
+                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto3.jpeg"));
+                        }
                     }
                 }
             }
@@ -66,6 +80,15 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(6, 4, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 2, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 0, tabuleiro, Cor.BRANCO));
+
+            tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 1, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 3, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 5, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -183,6 +206,18 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         jButton_f2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton_a1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a1ActionPerformed(evt);
+            }
+        });
+
+        jButton_a2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -435,6 +470,34 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton_a1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a1ActionPerformed
+        if (mover) {
+            mover(posicaoInicial, 0);
+        } else {
+            mover = true;
+            posicaoInicial = 0;
+        }
+        System.out.println("moveu");
+    }//GEN-LAST:event_jButton_a1ActionPerformed
+
+    private void jButton_a2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a2ActionPerformed
+//        if (mover) {
+//            mover(posicaoInicial, 1);
+//        } else {
+//            mover = true;
+//            posicaoInicial = 1;
+//        }
+//        System.out.println("moveu");
+        pecaCapturada = tabuleiro.getCasas()[1 / 10][1 % 10];
+        Peca inicio = tabuleiro.getCasas()[0][0];
+        Peca fina = tabuleiro.getCasas()[0][1];
+        tabuleiro.getCasas()[0][1] = tabuleiro.getCasas()[0][0];
+        tabuleiro.getCasas()[0][0] = null;
+        inicio = tabuleiro.getCasas()[0][0];
+        fina = tabuleiro.getCasas()[0][1];
+        montaPecas();
+    }//GEN-LAST:event_jButton_a2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -470,6 +533,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         });
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_a1;
