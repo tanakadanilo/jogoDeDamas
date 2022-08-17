@@ -10,5 +10,5 @@ package Pecas;
  */
 public enum Cor {
 
-    VAZIO, BRANCO, PRETA;
+    BRANCO, PRETA;
 }

@@ -17,22 +17,16 @@ public class Peao extends Peca {
 
     public Peao(Posicao p, Tabuleiro tabuleiro, Cor cor) {
         super(p, tabuleiro, cor);
-        if (cor == Cor.VAZIO) {
-            throw new IllegalStateException("Tentando criar uma peça no tabuleiro que não é nem branca nem preta");
-        }
     }
 
     public Peao(int posicaoX, int posicaoY, Tabuleiro tabuleiro, Cor cor) {
         super(posicaoX, posicaoY, tabuleiro, cor);
-        if (cor == Cor.VAZIO) {
-            throw new IllegalStateException("Tentando criar uma peça no tabuleiro que não é nem branca nem preta");
-        }
     }
 
     public void moverPeao(Posicao posicaoFinal) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
         //  * método para mover a peça, o parâmetro define a direção, já que um peão só pode se mover em 2 direções
 
-        if (!podeMover()) {//  * nenhum movimento possivel
+        if (!podeMover(posicaoFinal)) {//  * nenhum movimento possivel
             throw new ExcecaoRegraDoJogo("A peça selecionada não tem nenhum movimento possível");
         }
         if (!tabuleiro.posicaoExiste(posicaoFinal)) {
@@ -46,10 +40,10 @@ public class Peao extends Peca {
     public boolean[][] movimentosPossiveis() {
         boolean[][] movimentosPossiveis = new boolean[tabuleiro.getTamanhoHorizontal()][tabuleiro.getTamanhoVertical()];
         if (this.cor == Cor.BRANCO) {//  * gerando movimentos possiveis para uma peças brancas
-            if (podeMoverSemCapturar(true)) {// * pode mover pra direita sem capturar
+            if (podeMoverDireita()) {// * pode mover pra direita sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] = true;
             }
-            if (podeMoverSemCapturar(false)) {// * pode mover pra esquerda sem capturar
+            if (podeMoverEsquerda()) {// * pode mover pra esquerda sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() - 1][this.p.getPosicaoY() - 1] = true;
             }
             if (podeCapturarDireita()) {
@@ -59,72 +53,109 @@ public class Peao extends Peca {
                 movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() - 2] = true;
             }
         } else {//  * gerando movimentos possiveis para uma peças preta
-            if (podeMoverSemCapturar(true)) {// * pode mover pra direita sem capturar
+            if (podeMoverDireita()) {// * pode mover pra direita sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1] = true;
             }
-            if (podeMoverSemCapturar(false)) {// * pode mover pra esquerda sem capturar
-                movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] = true;
+            if (podeMoverEsquerda()) {// * pode mover pra esquerda sem capturar
+                movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() + 1] = true;
             }
             if (podeCapturarDireita()) {
-                movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() - 2] = true;
+                movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() + 2] = true;
             }
             if (podeCapturarEsquerda()) {
-                movimentosPossiveis[this.p.getPosicaoX() + 2][this.p.getPosicaoY() - 2] = true;
+                movimentosPossiveis[this.p.getPosicaoX() + 2][this.p.getPosicaoY() + 2] = true;
             }
         }
 
         return movimentosPossiveis;
     }
 
-    public boolean posicaoEstaVazia(Posicao p) {
-        return ((tabuleiro.posicaoExiste(p)) && (tabuleiro.getCasas()[p.getPosicaoX()][p.getPosicaoY()].getCor() == Cor.VAZIO));//    * posicao existe e não tem nenhuma peça nesta posição
-    }
-
-    public boolean podeMover() {
-        return podeMoverSemCapturar(true) //    * pode mover pra direita
-                || podeMoverSemCapturar(false)//    * pode mover pra esquerda
-                || podeCapturarDireita()//  * pode capturar pra direita
-                || podeCapturarEsquerda();// * pode capturar pra esquerda
-    }
-
-    public boolean podeMoverSemCapturar(boolean moverPraDireita) {
-
-        if (moverPraDireita) {//    * mover pra direita
-            if (this.cor == Cor.BRANCO) {//    * é uma peça branca
-                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1].getCor() == Cor.VAZIO;
-            } else {//  * é uma peça preta
-                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1].getCor() == Cor.VAZIO;
-            }
-        } else {//    * mover pra esquerda
-            if (this.cor == Cor.BRANCO) {//    * é uma peça branca
-                return tabuleiro.getCasas()[this.p.getPosicaoX() - 1][this.p.getPosicaoY() - 1].getCor() == Cor.VAZIO;
-            } else {//  * é uma peça preta
-                return tabuleiro.getCasas()[this.p.getPosicaoX() + 1][this.p.getPosicaoY() + 1].getCor() == Cor.VAZIO;
-            }
+    public boolean podeMoverEsquerda() {
+        Posicao destino = null;
+        if (this.cor == Cor.BRANCO) {//    * é uma peça branca
+            destino = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() - 1);
+        } else {//  * é uma peça preta
+            destino = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() + 1);
         }
+        if (!tabuleiro.posicaoExiste(destino)) {
+            return false;
+        }
+        return tabuleiro.getCasas()[destino.getPosicaoX()][destino.getPosicaoY()] == null;
+    }
+
+    public boolean podeMoverDireita() {
+        Posicao destino = null;
+        if (this.cor == Cor.BRANCO) {//    * é uma peça branca
+            destino = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
+        } else {//  * é uma peça preta
+            destino = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
+        }
+        if (!tabuleiro.posicaoExiste(destino)) {
+            return false;
+        }
+        var casas = tabuleiro.getCasas();
+        return tabuleiro.getCasas()[destino.getPosicaoX()][destino.getPosicaoY()] == null;
     }
 
     private boolean podeCapturarDireita() {
+
+        Posicao posicaoFinal = null;
+        Posicao posicaoCaptura = null;
         if (this.cor == Cor.BRANCO) {
-            Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() - 1][posicaoFinal.getPosicaoY() + 1].getCor() == Cor.PRETA//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
+            posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
+            posicaoCaptura = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
         } else {//    * é uma peça preta
-            Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita inferior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1].getCor() == Cor.BRANCO//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
+            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita inferior
+            posicaoCaptura = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
         }
+        if (!tabuleiro.posicaoExiste(posicaoFinal)) {// * posição final não existe
+            return false;
+        }
+        if (tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] != null) {//  *  tem uma peça na posição final
+            return false;
+        }
+        if (tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()] == null) {//    * não tem uma peça na posição para capturar
+            return false;
+        }
+
+        return tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()].getCor() != this.getCor();
     }
 
     private boolean podeCapturarEsquerda() {
+        Posicao posicaoFinal = null;
+        Posicao posicaoCaptura = null;
         if (this.cor == Cor.BRANCO) {
-            Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() + 1].getCor() == Cor.PRETA//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
+            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
+            posicaoCaptura = new Posicao((posicaoFinal.getPosicaoX() + 1), (posicaoFinal.getPosicaoY() + 1));
         } else {//    * é uma peça preta
-            Posicao posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
-            return tabuleiro.getCasas()[posicaoFinal.getPosicaoX() + 1][posicaoFinal.getPosicaoY() - 1].getCor() == Cor.BRANCO//    * tem uma peça adversária nessa posicao
-                    && tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()].getCor() == Cor.VAZIO;//  * não tem nenhuma peça na posição final
+            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
+            posicaoCaptura = new Posicao((posicaoFinal.getPosicaoX() + 1), (posicaoFinal.getPosicaoY() - 1));
         }
+        if (!tabuleiro.posicaoExiste(posicaoFinal)) {// * posição final não existe
+            return false;
+        }
+        if (tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] != null) {//  *  tem uma peça na posição final
+            return false;
+        }
+        if (tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()] == null) {//    * não tem uma peça na posição para capturar
+            return false;
+        }
+
+        return tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()].getCor() != this.getCor();
     }
+
+    @Override
+    public boolean podeMover(Posicao destino) {
+        var casas = movimentosPossiveis();
+        for (var linha : casas) {
+            for (var casa : linha) {
+                System.out.print(casa + "\t");
+            }
+            System.out.println("");
+        }
+        int posicaoXDestino = destino.getPosicaoX();
+        int posicaoYDestino = destino.getPosicaoY();
+        return movimentosPossiveis()[posicaoXDestino][posicaoYDestino];//   * ve se a posição de destino é um movimento válidos
+    }
+
 }

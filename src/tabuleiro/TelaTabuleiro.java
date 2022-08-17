@@ -14,9 +14,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JRootPane;
+import jogo.ExcecaoRegraDoJogo;
 
 /**
  *
@@ -26,32 +28,55 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     ArrayList<JButton> listaBotoes = new ArrayList<>();
     Tabuleiro tabuleiro = new Tabuleiro(8, 8);
+    Peca pecaCapturada = null;
+    boolean mover = false;
+    Posicao posicaoInicial;
 
     /**
      * Creates new form NewJFrame
      */
     public TelaTabuleiro() {
         initComponents();
-        mostraTabuleiro();
+        loadBotoes();
+//        mostraTabuleiro();
         preencheTabuleiro();
         montaPecas();
+    }
 
+    private void mover(Posicao inicio, Posicao fim) {
+
+        try {
+            if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()] == null) {//    * não escolheu peça inicial
+                mover = false;
+                throw new ExcecaoTabuleiro("Escolha a peça que deseja mover");
+            }
+            pecaCapturada = tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()];
+            tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].mover(fim);
+            this.mover = false;
+            montaPecas();
+        } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
+            mover = false;
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void montaPecas() {
-        listaBotoes.get(57).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto.png"));
+        mostraTabuleiro();
         Peca[][] casas = tabuleiro.getCasas();
         for (var linha : casas) {
-            for (var casa : linha) {
-                if (casa != null) {
+            for (var casa : linha) {//  * percorrendo todo o tabuleiro
+                if (casa != null) {//   * casa não vazia
                     if (casa.getCor() == Cor.BRANCO) {
                         Posicao p = casa.getPosicao();
-                        listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));;
+                        listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto3.jpeg"));
+                    } else {
+                        Posicao p = casa.getPosicao();
+                        listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));
                     }
                 }
             }
         }
-        Posicao peca = tabuleiro.getCasas()[7][7].getPosicao();
     }
 
     private void preencheTabuleiro() {
@@ -66,23 +91,30 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(6, 4, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 2, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 0, tabuleiro, Cor.BRANCO));
+
+            tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 1, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 3, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 5, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
+
         } catch (ExcecaoTabuleiro ex) {
-            Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TelaTabuleiro.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void mostraTabuleiro() {
+    private void loadBotoes() {
         Component[] compsPanel = jPanel1.getComponents();
         for (var c : compsPanel) {
-            if (c instanceof javax.swing.JButton) {
-
-                if (c instanceof JButton jButton) {
-                    listaBotoes.add(jButton);
-                    jButton.setIcon(new javax.swing.ImageIcon("src/assets/fundo_preto.jpeg"));
-                }
+            if (c instanceof JButton jButton) {
+                listaBotoes.add(jButton);
+                jButton.setIcon(new javax.swing.ImageIcon("src/assets/fundo_preto.jpeg"));
             }
         }
-
         Comparator c = (o1, o2) -> {
 
             JButton bt1 = (JButton) o1;
@@ -95,6 +127,10 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         };
 
         listaBotoes.sort(c);
+    }
+
+    private void mostraTabuleiro() {
+
         String caminho1 = "src/assets/fundo_preto.jpeg";
         String caminho2 = "src/assets/fundo_branco.jpeg";
         for (int i = 0; i < listaBotoes.size(); i++) {
@@ -183,6 +219,30 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         jButton_f2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton_b2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_b2ActionPerformed(evt);
+            }
+        });
+
+        jButton_c1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_c1ActionPerformed(evt);
+            }
+        });
+
+        jButton_a1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a1ActionPerformed(evt);
+            }
+        });
+
+        jButton_a2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -435,6 +495,46 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton_a1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a1ActionPerformed
+        Posicao PosicaoThis = new Posicao(0, 0);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_a1ActionPerformed
+
+    private void jButton_a2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a2ActionPerformed
+        Posicao PosicaoThis = new Posicao(0, 1);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_a2ActionPerformed
+
+    private void jButton_b2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_b2ActionPerformed
+        Posicao PosicaoThis = new Posicao(1, 1);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_b2ActionPerformed
+
+    private void jButton_c1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_c1ActionPerformed
+        Posicao PosicaoThis = new Posicao(2, 0);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_c1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -449,16 +549,24 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaTabuleiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaTabuleiro.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaTabuleiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaTabuleiro.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaTabuleiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaTabuleiro.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaTabuleiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaTabuleiro.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -470,6 +578,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         });
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_a1;

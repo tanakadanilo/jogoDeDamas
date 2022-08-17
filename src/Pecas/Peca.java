@@ -4,6 +4,7 @@
  */
 package Pecas;
 
+import jogo.ExcecaoRegraDoJogo;
 import tabuleiro.ExcecaoTabuleiro;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
@@ -12,7 +13,7 @@ import tabuleiro.Tabuleiro;
  *
  * @author tanak
  */
-public class Peca {
+public abstract class Peca {
 
     protected Posicao p;
     protected final Tabuleiro tabuleiro;
@@ -42,20 +43,28 @@ public class Peca {
         return cor;
     }
 
-    public void mover(int posicaoX, int posicaoY) throws ExcecaoTabuleiro {
+    public void mover(int posicaoX, int posicaoY) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
         if (!tabuleiro.posicaoExiste(posicaoX, posicaoY)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
+        }
+        Posicao destino = new Posicao(posicaoX, posicaoY);
+        if (!podeMover(destino)) {
+            throw new ExcecaoRegraDoJogo("A peça escolhida não pode ser movida para essa posição");
         }
         this.p.setPosicaoX(posicaoX);
         this.p.setPosicaoY(posicaoY);
     }
 
-    public void mover(Posicao p) throws ExcecaoTabuleiro {
+    public void mover(Posicao p) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
+        }
+         if (!podeMover(p)) {
+            throw new ExcecaoRegraDoJogo("A peça escolhida não pode ser movida para essa posição");
         }
         tabuleiro.moverPeca(this, p);
         this.p = p;
     }
 
+    public abstract boolean podeMover(Posicao destino);
 }

@@ -20,13 +20,10 @@ public class Programa {
     private static tabuleiro.Tabuleiro tabuleiro = new Tabuleiro(8, 8);
 
     public static void main(String[] args) throws ExcecaoTabuleiro {
+        
         Posicao p = new Posicao(7, 7);
         Peca vazia = new Peao(p, tabuleiro, Cor.BRANCO);
         tabuleiro.adicionaPeca(vazia);
-        p = new Posicao(p.getPosicaoX() - 1, p.getPosicaoY() - 1);
-        ((Peao) vazia).mover(p);
-        p = new Posicao(p.getPosicaoX() - 1, p.getPosicaoY() - 1);
-        ((Peao) vazia).mover(p);
 
         Peca[][] casas = tabuleiro.getCasas();
         int cont = 0;
