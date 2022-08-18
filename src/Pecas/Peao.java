@@ -102,12 +102,15 @@ public class Peao extends Peca {
         Posicao posicaoCaptura = null;
         if (this.cor == Cor.BRANCO) {
             posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
-            posicaoCaptura = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
+            posicaoCaptura = new Posicao(posicaoFinal.getPosicaoX() + 1, posicaoFinal.getPosicaoY() - 1);
         } else {//    * é uma peça preta
             posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita inferior
-            posicaoCaptura = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
+            posicaoCaptura = new Posicao(posicaoFinal.getPosicaoX() - 1, posicaoFinal.getPosicaoY() + 1);
         }
         if (!tabuleiro.posicaoExiste(posicaoFinal)) {// * posição final não existe
+            return false;
+        }
+        if (!tabuleiro.posicaoExiste(posicaoCaptura)) {// * posição final não existe
             return false;
         }
         if (tabuleiro.getCasas()[posicaoFinal.getPosicaoX()][posicaoFinal.getPosicaoY()] != null) {//  *  tem uma peça na posição final

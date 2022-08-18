@@ -52,8 +52,8 @@ public class Tabuleiro {
     }
 
     public boolean posicaoExiste(Posicao p) {
-        return (p.posicaoX >= 0 && p.posicaoX <= this.tamanhoHorizontal
-                && p.posicaoY >= 0 && p.posicaoY <= this.tamanhoVertical);
+        return (p.posicaoX >= 0 && p.posicaoX < this.tamanhoHorizontal
+                && p.posicaoY >= 0 && p.posicaoY < this.tamanhoVertical);
     }
 
     public void adicionaPeca(Peca peca) throws ExcecaoTabuleiro {

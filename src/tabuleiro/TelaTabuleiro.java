@@ -220,9 +220,75 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButton_f4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_f4ActionPerformed(evt);
+            }
+        });
+
+        jButton_f6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_f6ActionPerformed(evt);
+            }
+        });
+
+        jButton_f8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_f8ActionPerformed(evt);
+            }
+        });
+
+        jButton_g1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_g1ActionPerformed(evt);
+            }
+        });
+
+        jButton_g3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_g3ActionPerformed(evt);
+            }
+        });
+
+        jButton_g5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_g5ActionPerformed(evt);
+            }
+        });
+
         jButton_b2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_b2ActionPerformed(evt);
+            }
+        });
+
+        jButton_g7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_g7ActionPerformed(evt);
+            }
+        });
+
+        jButton_b4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_b4ActionPerformed(evt);
+            }
+        });
+
+        jButton_b6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_b6ActionPerformed(evt);
+            }
+        });
+
+        jButton_h2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_h2ActionPerformed(evt);
+            }
+        });
+
+        jButton_b8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_b8ActionPerformed(evt);
             }
         });
 
@@ -238,9 +304,117 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         });
 
-        jButton_a2.addActionListener(new java.awt.event.ActionListener() {
+        jButton_a3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_a2ActionPerformed(evt);
+                jButton_a3ActionPerformed(evt);
+            }
+        });
+
+        jButton_a5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a5ActionPerformed(evt);
+            }
+        });
+
+        jButton_a7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_a7ActionPerformed(evt);
+            }
+        });
+
+        jButton_h3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_h3ActionPerformed(evt);
+            }
+        });
+
+        jButton_h4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_h4ActionPerformed(evt);
+            }
+        });
+
+        jButton_h6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_h6ActionPerformed(evt);
+            }
+        });
+
+        jButton_c3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_c3ActionPerformed(evt);
+            }
+        });
+
+        jButton_h8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_h8ActionPerformed(evt);
+            }
+        });
+
+        jButton_c5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_c5ActionPerformed(evt);
+            }
+        });
+
+        jButton_c7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_c7ActionPerformed(evt);
+            }
+        });
+
+        jButton_d2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_d2ActionPerformed(evt);
+            }
+        });
+
+        jButton_d4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_d4ActionPerformed(evt);
+            }
+        });
+
+        jButton_d6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_d6ActionPerformed(evt);
+            }
+        });
+
+        jButton_d8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_d8ActionPerformed(evt);
+            }
+        });
+
+        jButton_e1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_e1ActionPerformed(evt);
+            }
+        });
+
+        jButton_e3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_e3ActionPerformed(evt);
+            }
+        });
+
+        jButton_e5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_e5ActionPerformed(evt);
+            }
+        });
+
+        jButton_e7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_e7ActionPerformed(evt);
+            }
+        });
+
+        jButton_f2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_f2ActionPerformed(evt);
             }
         });
 
@@ -259,7 +433,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                         .addComponent(jButton_h3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_h4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_h5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_h6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,7 +557,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                                 .addComponent(jButton_g7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton_g8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,15 +679,35 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_a1ActionPerformed
 
-    private void jButton_a2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a2ActionPerformed
-        Posicao PosicaoThis = new Posicao(0, 1);
+    private void jButton_a3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a3ActionPerformed
+        Posicao PosicaoThis = new Posicao(0, 2);
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
-    }//GEN-LAST:event_jButton_a2ActionPerformed
+    }//GEN-LAST:event_jButton_a3ActionPerformed
+
+    private void jButton_a5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a5ActionPerformed
+        Posicao PosicaoThis = new Posicao(0, 4);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_a5ActionPerformed
+
+    private void jButton_a7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_a7ActionPerformed
+        Posicao PosicaoThis = new Posicao(0, 6);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_a7ActionPerformed
 
     private void jButton_b2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_b2ActionPerformed
         Posicao PosicaoThis = new Posicao(1, 1);
@@ -525,6 +719,36 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_b2ActionPerformed
 
+    private void jButton_b4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_b4ActionPerformed
+        Posicao PosicaoThis = new Posicao(1, 3);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_b4ActionPerformed
+
+    private void jButton_b6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_b6ActionPerformed
+        Posicao PosicaoThis = new Posicao(1, 5);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_b6ActionPerformed
+
+    private void jButton_b8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_b8ActionPerformed
+        Posicao PosicaoThis = new Posicao(1, 7);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_b8ActionPerformed
+
     private void jButton_c1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_c1ActionPerformed
         Posicao PosicaoThis = new Posicao(2, 0);
         if (!mover) {
@@ -534,6 +758,246 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             mover(posicaoInicial, PosicaoThis);
         }
     }//GEN-LAST:event_jButton_c1ActionPerformed
+
+    private void jButton_c3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_c3ActionPerformed
+        Posicao PosicaoThis = new Posicao(2, 2);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_c3ActionPerformed
+
+    private void jButton_c5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_c5ActionPerformed
+        Posicao PosicaoThis = new Posicao(2, 4);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_c5ActionPerformed
+
+    private void jButton_c7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_c7ActionPerformed
+        Posicao PosicaoThis = new Posicao(2, 6);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_c7ActionPerformed
+
+    private void jButton_d2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_d2ActionPerformed
+        Posicao PosicaoThis = new Posicao(3, 1);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_d2ActionPerformed
+
+    private void jButton_d4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_d4ActionPerformed
+        Posicao PosicaoThis = new Posicao(3, 3);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_d4ActionPerformed
+
+    private void jButton_d6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_d6ActionPerformed
+        Posicao PosicaoThis = new Posicao(3, 5);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_d6ActionPerformed
+
+    private void jButton_d8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_d8ActionPerformed
+        Posicao PosicaoThis = new Posicao(3, 7);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_d8ActionPerformed
+
+    private void jButton_e1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_e1ActionPerformed
+        Posicao PosicaoThis = new Posicao(4, 0);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_e1ActionPerformed
+
+    private void jButton_e3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_e3ActionPerformed
+        Posicao PosicaoThis = new Posicao(4, 2);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_e3ActionPerformed
+
+    private void jButton_e5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_e5ActionPerformed
+        Posicao PosicaoThis = new Posicao(4, 4);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_e5ActionPerformed
+
+    private void jButton_e7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_e7ActionPerformed
+        Posicao PosicaoThis = new Posicao(4, 6);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_e7ActionPerformed
+
+    private void jButton_f2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_f2ActionPerformed
+        Posicao PosicaoThis = new Posicao(5, 1);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_f2ActionPerformed
+
+    private void jButton_f4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_f4ActionPerformed
+        Posicao PosicaoThis = new Posicao(5, 3);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_f4ActionPerformed
+
+    private void jButton_f6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_f6ActionPerformed
+        Posicao PosicaoThis = new Posicao(5, 5);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_f6ActionPerformed
+
+    private void jButton_f8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_f8ActionPerformed
+        Posicao PosicaoThis = new Posicao(5, 7);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_f8ActionPerformed
+
+    private void jButton_g1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_g1ActionPerformed
+        Posicao PosicaoThis = new Posicao(6, 0);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_g1ActionPerformed
+
+    private void jButton_g3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_g3ActionPerformed
+        Posicao PosicaoThis = new Posicao(6, 2);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_g3ActionPerformed
+
+    private void jButton_g5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_g5ActionPerformed
+        Posicao PosicaoThis = new Posicao(6, 4);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_g5ActionPerformed
+
+    private void jButton_g7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_g7ActionPerformed
+        Posicao PosicaoThis = new Posicao(6, 6);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_g7ActionPerformed
+
+    private void jButton_h3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_h3ActionPerformed
+        Posicao PosicaoThis = new Posicao(7, 2);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_h3ActionPerformed
+
+    private void jButton_h2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_h2ActionPerformed
+        Posicao PosicaoThis = new Posicao(7, 1);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_h2ActionPerformed
+
+    private void jButton_h4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_h4ActionPerformed
+        Posicao PosicaoThis = new Posicao(7, 3);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_h4ActionPerformed
+
+    private void jButton_h6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_h6ActionPerformed
+        Posicao PosicaoThis = new Posicao(7, 5);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_h6ActionPerformed
+
+    private void jButton_h8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_h8ActionPerformed
+        Posicao PosicaoThis = new Posicao(7, 7);
+        if (!mover) {
+            posicaoInicial = PosicaoThis;
+            mover = true;
+        } else {
+            mover(posicaoInicial, PosicaoThis);
+        }
+    }//GEN-LAST:event_jButton_h8ActionPerformed
 
     /**
      * @param args the command line arguments
