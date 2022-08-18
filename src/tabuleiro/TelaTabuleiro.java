@@ -43,6 +43,29 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         montaPecas();
     }
 
+    private boolean capturou(Posicao inicio, Posicao fim) {
+        return (inicio.getPosicaoX() - fim.getPosicaoX() == 2) || (inicio.getPosicaoX() - fim.getPosicaoX() == (-2));// * se moveu 2 casas é porque capturou
+    }
+
+    private void capturaPeca(Posicao posicaoInicial, Posicao posicaoFinal) {
+        Posicao posicaoCaptura = null;
+        int posicaoX = 0;
+        int posicaoY = 0;
+        if (posicaoFinal.getPosicaoX() - posicaoInicial.getPosicaoX() == 2) {//    * moveu pra baixo
+            posicaoX = posicaoFinal.getPosicaoX() - 1;
+        } else {//    * moveu pra cima
+            posicaoX = posicaoFinal.getPosicaoX() + 1;
+        }
+        if (posicaoFinal.getPosicaoY() - posicaoInicial.getPosicaoY() == 2) {//   * moveu pra direita do tabuleiro
+            posicaoY = posicaoFinal.getPosicaoY() - 1;
+        } else {//   * moveu pra esquerda do tabuleiro
+            posicaoY = posicaoFinal.getPosicaoY() + 1;
+        }
+        posicaoCaptura = new Posicao(posicaoX, posicaoY);
+        pecaCapturada = tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()];// * salvando a peça como capturada
+        tabuleiro.getCasas()[posicaoCaptura.getPosicaoX()][posicaoCaptura.getPosicaoY()] = null;//  * tirando peça do tabuleiro
+    }
+
     private void mover(Posicao inicio, Posicao fim) {
 
         try {
@@ -53,6 +76,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             pecaCapturada = tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()];
             tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].mover(fim);
             this.mover = false;
+            if (capturou(inicio, fim)) {
+                capturaPeca(posicaoInicial, fim);
+            }
             montaPecas();
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
