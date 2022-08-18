@@ -148,13 +148,6 @@ public class Peao extends Peca {
 
     @Override
     public boolean podeMover(Posicao destino) {
-        var casas = movimentosPossiveis();
-        for (var linha : casas) {
-            for (var casa : linha) {
-                System.out.print(casa + "\t");
-            }
-            System.out.println("");
-        }
         int posicaoXDestino = destino.getPosicaoX();
         int posicaoYDestino = destino.getPosicaoY();
         return movimentosPossiveis()[posicaoXDestino][posicaoYDestino];//   * ve se a posição de destino é um movimento válidos
