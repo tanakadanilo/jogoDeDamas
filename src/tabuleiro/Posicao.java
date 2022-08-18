@@ -10,8 +10,8 @@ package tabuleiro;
  */
 public class Posicao {
 
-    protected int posicaoX;
-    protected int posicaoY;
+    protected int posicaoX;//   * numero da linha
+    protected int posicaoY;//   * numero da coluna
 
     public Posicao(int posicaoX, int posicaoy) {
         this.posicaoX = posicaoX;
@@ -33,5 +33,5 @@ public class Posicao {
     public void setPosicaoY(int posicaoY) {
         this.posicaoY = posicaoY;
     }
-    
+
 }

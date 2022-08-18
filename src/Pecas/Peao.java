@@ -41,26 +41,26 @@ public class Peao extends Peca {
         boolean[][] movimentosPossiveis = new boolean[tabuleiro.getTamanhoHorizontal()][tabuleiro.getTamanhoVertical()];
         if (this.cor == Cor.BRANCO) {//  * gerando movimentos possiveis para uma peças brancas
             if (podeMoverDireita()) {// * pode mover pra direita sem capturar
-                movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] = true;
+                movimentosPossiveis[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1] = true;
             }
             if (podeMoverEsquerda()) {// * pode mover pra esquerda sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() - 1][this.p.getPosicaoY() - 1] = true;
             }
             if (podeCapturarDireita()) {
-                movimentosPossiveis[this.p.getPosicaoX() + 2][this.p.getPosicaoY() - 2] = true;
+                movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() + 2] = true;
             }
             if (podeCapturarEsquerda()) {
                 movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() - 2] = true;
             }
         } else {//  * gerando movimentos possiveis para uma peças preta
             if (podeMoverDireita()) {// * pode mover pra direita sem capturar
-                movimentosPossiveis[this.p.getPosicaoX() - 1][this.p.getPosicaoY() + 1] = true;
+                movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() - 1] = true;
             }
             if (podeMoverEsquerda()) {// * pode mover pra esquerda sem capturar
                 movimentosPossiveis[this.p.getPosicaoX() + 1][this.p.getPosicaoY() + 1] = true;
             }
             if (podeCapturarDireita()) {
-                movimentosPossiveis[this.p.getPosicaoX() - 2][this.p.getPosicaoY() + 2] = true;
+                movimentosPossiveis[this.p.getPosicaoX() + 2][this.p.getPosicaoY() - 2] = true;
             }
             if (podeCapturarEsquerda()) {
                 movimentosPossiveis[this.p.getPosicaoX() + 2][this.p.getPosicaoY() + 2] = true;
@@ -86,14 +86,13 @@ public class Peao extends Peca {
     public boolean podeMoverDireita() {
         Posicao destino = null;
         if (this.cor == Cor.BRANCO) {//    * é uma peça branca
-            destino = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
-        } else {//  * é uma peça preta
             destino = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
+        } else {//  * é uma peça preta
+            destino = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
         }
         if (!tabuleiro.posicaoExiste(destino)) {
             return false;
         }
-        var casas = tabuleiro.getCasas();
         return tabuleiro.getCasas()[destino.getPosicaoX()][destino.getPosicaoY()] == null;
     }
 
@@ -102,11 +101,11 @@ public class Peao extends Peca {
         Posicao posicaoFinal = null;
         Posicao posicaoCaptura = null;
         if (this.cor == Cor.BRANCO) {
-            posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
-            posicaoCaptura = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
-        } else {//    * é uma peça preta
-            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita inferior
+            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
             posicaoCaptura = new Posicao(this.p.getPosicaoX() + 1, this.p.getPosicaoY() - 1);
+        } else {//    * é uma peça preta
+            posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita inferior
+            posicaoCaptura = new Posicao(this.p.getPosicaoX() - 1, this.p.getPosicaoY() + 1);
         }
         if (!tabuleiro.posicaoExiste(posicaoFinal)) {// * posição final não existe
             return false;
@@ -125,11 +124,11 @@ public class Peao extends Peca {
         Posicao posicaoFinal = null;
         Posicao posicaoCaptura = null;
         if (this.cor == Cor.BRANCO) {
-            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() - 2);//   * mover para diagonal direita superior
+            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() - 2);//   * mover para diagonal esquerda superior
             posicaoCaptura = new Posicao((posicaoFinal.getPosicaoX() + 1), (posicaoFinal.getPosicaoY() + 1));
         } else {//    * é uma peça preta
-            posicaoFinal = new Posicao(this.p.getPosicaoX() - 2, this.p.getPosicaoY() + 2);//   * mover para diagonal direita superior
-            posicaoCaptura = new Posicao((posicaoFinal.getPosicaoX() + 1), (posicaoFinal.getPosicaoY() - 1));
+            posicaoFinal = new Posicao(this.p.getPosicaoX() + 2, this.p.getPosicaoY() + 2);//   * mover para diagonal esquerda superior
+            posicaoCaptura = new Posicao((posicaoFinal.getPosicaoX() - 1), (posicaoFinal.getPosicaoY() - 1));
         }
         if (!tabuleiro.posicaoExiste(posicaoFinal)) {// * posição final não existe
             return false;
