@@ -77,8 +77,14 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }
 
-    private void promover(Peca peao) {
+    private Peca promover(Peca peao) {
 
+        if (peao == null) {
+            return peao;
+        }
+        if (peao instanceof Dama) {
+            return peao;
+        }
         if (peao.getPosicao().getPosicaoX() == 0 && peao.getCor() == Cor.BRANCO) {
             peao = new Dama(peao.getPosicao(), tabuleiro, peao.getCor());
             JOptionPane.showMessageDialog(rootPane, "Promoveu");
@@ -86,6 +92,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             peao = new Dama(peao.getPosicao(), tabuleiro, peao.getCor());
             JOptionPane.showMessageDialog(rootPane, "Promoveu");
         }
+        return peao;
     }
 
     private Peca rainhaCapturou(Posicao inicio, Posicao fim) {
@@ -154,20 +161,24 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             if (capturou(inicio, fim)) {
                 capturaPeca(posicaoInicial, fim);
             }
-            if (turno == Cor.BRANCO) {
-                jLabel_turno.setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));
-                turno = Cor.PRETA;
-            } else {
-                jLabel_turno.setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto3.jpeg"));
-                turno = Cor.BRANCO;
-            }
+            trocaTurno();
+            tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
             montaPecas();
-            promover(tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()]);
             validaFim();
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void trocaTurno() {
+        if (turno == Cor.BRANCO) {
+            jLabel_turno.setIcon(new ImageIcon("src/assets/peca_amarela_fundo_preto2.jpeg"));
+            turno = Cor.PRETA;
+        } else {
+            jLabel_turno.setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto3.jpeg"));
+            turno = Cor.BRANCO;
         }
     }
 
@@ -192,26 +203,32 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     private void preencheTabuleiro() {
 
         try {
-            Peca p =new Peao(0, 6, tabuleiro, Cor.BRANCO);
-            tabuleiro.adicionaPeca(p);
-            tabuleiro.adicionaPeca(new Peao(7, 5, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(7, 7, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Dama(7, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 1, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 6, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 4, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 2, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 0, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(5, 7, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Dama(5, 5, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(5, 3, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(5, 1, tabuleiro, Cor.BRANCO));
 
             tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
-//            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 1, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 3, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 5, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(2, 0, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(2, 2, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(2, 4, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
 
-            promover(p);
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(Level.SEVERE, null, ex);
