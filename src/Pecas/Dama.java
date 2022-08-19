@@ -114,4 +114,18 @@ public class Dama extends Peca {
         return movimentosPossiveis()[destino.getPosicaoX()][destino.getPosicaoY()];
     }
 
+    @Override
+    public boolean algumMovimentoPossivel() {
+        boolean podeMover = false;
+        boolean[][] movimentosPossiveis = movimentosPossiveis();
+        for (var linha : movimentosPossiveis) {
+            for (var casa : linha) {
+                if (casa) {
+                    podeMover = true;
+                }
+            }
+        }
+        return podeMover;
+    }
+
 }

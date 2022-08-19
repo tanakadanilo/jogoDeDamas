@@ -59,12 +59,14 @@ public abstract class Peca {
         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
         }
-         if (!podeMover(p)) {
+        if (!podeMover(p)) {
             throw new ExcecaoRegraDoJogo("A peça escolhida não pode ser movida para essa posição");
         }
         tabuleiro.moverPeca(this, p);
         this.p = p;
     }
+
+    public abstract boolean algumMovimentoPossivel();
 
     public abstract boolean podeMover(Posicao destino);
 }

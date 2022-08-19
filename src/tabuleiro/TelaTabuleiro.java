@@ -31,6 +31,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     boolean mover = false;
     Posicao posicaoInicial;
     Cor turno = Cor.BRANCO;
+    boolean manterJogo = true;
 
     /**
      * Creates new form NewJFrame
@@ -40,6 +41,51 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         loadBotoes();
         preencheTabuleiro();
         montaPecas();
+    }
+
+    private void recomeçarPartida() {
+        new TelaTabuleiro().setVisible(true);
+        this.dispose();
+    }
+
+    private void validaFim() {
+        Peca[][] todasAsPecas = tabuleiro.getCasas();
+        boolean brancoVivo = false;
+        boolean pretoVivo = false;
+        for (var linha : todasAsPecas) {
+            for (var peca : linha) {//  * passando por cada peça no tabuleiro
+                if (peca != null) {
+                    if (peca.algumMovimentoPossivel()) {
+                        if (peca.getCor() == Cor.BRANCO) {
+                            brancoVivo = true;
+                        } else {
+                            pretoVivo = true;
+                        }
+                    }
+                }
+            }
+        }
+        manterJogo = brancoVivo && pretoVivo;
+        if (!manterJogo) {//  * acabou a partida
+
+            if (!brancoVivo) {
+                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador branco perdeu :(");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador preto perdeu :(");
+            }
+            recomeçarPartida();
+        }
+    }
+
+    private void promover(Peca peao) {
+
+        if (peao.getPosicao().getPosicaoX() == 0 && peao.getCor() == Cor.BRANCO) {
+            peao = new Dama(peao.getPosicao(), tabuleiro, peao.getCor());
+            JOptionPane.showMessageDialog(rootPane, "Promoveu");
+        } else if (peao.getPosicao().getPosicaoX() == 7 && peao.getCor() == Cor.PRETA) {
+            peao = new Dama(peao.getPosicao(), tabuleiro, peao.getCor());
+            JOptionPane.showMessageDialog(rootPane, "Promoveu");
+        }
     }
 
     private Peca rainhaCapturou(Posicao inicio, Posicao fim) {
@@ -116,6 +162,8 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 turno = Cor.BRANCO;
             }
             montaPecas();
+            promover(tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()]);
+            validaFim();
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
@@ -144,7 +192,8 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     private void preencheTabuleiro() {
 
         try {
-            tabuleiro.adicionaPeca(new Peao(7, 7, tabuleiro, Cor.BRANCO));
+            Peca p =new Peao(0, 6, tabuleiro, Cor.BRANCO);
+            tabuleiro.adicionaPeca(p);
             tabuleiro.adicionaPeca(new Peao(7, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 1, tabuleiro, Cor.BRANCO));
@@ -156,12 +205,13 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
-            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
+//            tabuleiro.adicionaPeca(new Peao(0, 6, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 1, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 3, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 5, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
 
+            promover(p);
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(Level.SEVERE, null, ex);

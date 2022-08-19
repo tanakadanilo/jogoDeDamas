@@ -153,4 +153,18 @@ public class Peao extends Peca {
         return movimentosPossiveis()[posicaoXDestino][posicaoYDestino];//   * ve se a posição de destino é um movimento válidos
     }
 
+    @Override
+    public boolean algumMovimentoPossivel() {
+        boolean podeMover = false;
+        boolean[][] movimentosPossiveis = movimentosPossiveis();
+        for (var linha : movimentosPossiveis) {
+            for (var casa : linha) {
+                if (casa) {
+                    podeMover = true;
+                }
+            }
+        }
+        return podeMover;
+    }
+
 }
