@@ -155,13 +155,18 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].getCor() != turno) {
                 throw new ExcecaoRegraDoJogo("Não é a sua vez de jogar, tava querendo trapacear, né? safado");
             }
-            pecasCapturadas.add(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
             tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].mover(fim);
             this.mover = false;
             if (capturou(inicio, fim)) {
                 capturaPeca(posicaoInicial, fim);
+                pecasCapturadas.add(pecaCapturada);
             }
-            trocaTurno();
+            if (pecaCapturada != null && tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()].podeContinuarCapturando(fim)) {
+                posicaoInicial = tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()].getPosicao();
+                mover = true;
+            } else {//   * só trocar de turno se não puder constinuar capturando
+                trocaTurno();
+            }
             tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
             montaPecas();
             validaFim();
@@ -204,7 +209,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
         try {
             tabuleiro.adicionaPeca(new Peao(7, 7, tabuleiro, Cor.BRANCO));
-            tabuleiro.adicionaPeca(new Dama(7, 5, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(7, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 1, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 6, tabuleiro, Cor.BRANCO));
@@ -212,7 +217,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(6, 2, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(6, 0, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 7, tabuleiro, Cor.BRANCO));
-            tabuleiro.adicionaPeca(new Dama(5, 5, tabuleiro, Cor.BRANCO));
+            tabuleiro.adicionaPeca(new Peao(5, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 1, tabuleiro, Cor.BRANCO));
 

@@ -223,4 +223,16 @@ public class Peao extends Peca {
         return podeMover;
     }
 
+    @Override
+    public boolean podeContinuarCapturando(Posicao inicio) throws ExcecaoTabuleiro {
+        if (!tabuleiro.posicaoExiste(inicio)) {
+            throw new ExcecaoTabuleiro("A posição informada não existe");
+        }
+        Posicao thisPosicao = new Posicao(p.getPosicaoX(), p.getPosicaoY());//  * temp da posicao real da peça
+        this.p = inicio;
+        boolean resposta = podeCapturarAtrasDireita() || podeCapturarAtrasEsquerda() || podeCapturarDireita() || podeCapturarEsquerda();/// * testando todas as capturas possíveis
+        p = thisPosicao;//  * voltando peça para a posição real
+        return resposta;
+    }
+
 }

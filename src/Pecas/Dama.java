@@ -4,6 +4,7 @@
  */
 package Pecas;
 
+import tabuleiro.ExcecaoTabuleiro;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
 
@@ -126,6 +127,11 @@ public class Dama extends Peca {
             }
         }
         return podeMover;
+    }
+
+    @Override
+    public boolean podeContinuarCapturando(Posicao inicio) throws ExcecaoTabuleiro {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

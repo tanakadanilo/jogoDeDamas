@@ -69,4 +69,6 @@ public abstract class Peca {
     public abstract boolean algumMovimentoPossivel();
 
     public abstract boolean podeMover(Posicao destino);
+
+    public abstract boolean podeContinuarCapturando(Posicao inicio) throws ExcecaoTabuleiro;
 }
