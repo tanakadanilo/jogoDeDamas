@@ -74,6 +74,8 @@ public abstract class Peca {
         this.p = p;
     }
 
+    public abstract boolean[][] movimentosPossiveis();
+
     public abstract boolean algumMovimentoPossivel();
 
     public abstract boolean podeMover(Posicao destino);

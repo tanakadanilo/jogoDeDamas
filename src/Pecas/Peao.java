@@ -37,6 +37,7 @@ public class Peao extends Peca {
         }
     }
 
+    @Override
     public boolean[][] movimentosPossiveis() {
         boolean[][] movimentosPossiveis = new boolean[tabuleiro.getTamanhoHorizontal()][tabuleiro.getTamanhoVertical()];
         if (this.cor == Cor.BRANCO) {//  * gerando movimentos possiveis para uma peças brancas

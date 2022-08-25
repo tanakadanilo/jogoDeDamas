@@ -25,7 +25,7 @@ import jogo.Movimentos;
  * @author tanak
  */
 public class TelaTabuleiro extends javax.swing.JFrame {
-
+    
     ArrayList<JButton> listaBotoes = new ArrayList<>();
     ArrayList<Peca> pecasCapturadas = new ArrayList<>();
     ArrayList<Movimentos> listaMovimentos = new ArrayList<>();
@@ -46,7 +46,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         preencheTabuleiro();
         montaPecas();
     }
-
+    
     private void desfazerMovimento() {
         try {
             if (listaMovimentos.isEmpty()) {//  * não foi feito nenhum movimento ainda
@@ -67,18 +67,18 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void salvaMovimentos(Peca pecaMovida, Posicao posicaoInicio, Posicao posicaoFinal, Peca pecaCapturada) {
-
+        
         Movimentos movimento = new Movimentos(pecaMovida, posicaoInicio, posicaoFinal, pecaCapturada);
         listaMovimentos.add(movimento);
     }
-
+    
     private void recomeçarPartida() {
         new TelaTabuleiro().setVisible(true);
         this.dispose();
     }
-
+    
     private void validaFim() {
         Peca[][] todasAsPecas = tabuleiro.getCasas();
         boolean brancoVivo = false;
@@ -107,9 +107,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             recomeçarPartida();
         }
     }
-
+    
     private Peca promover(Peca peao) {
-
+        
         if (peao == null) {
             return peao;
         }
@@ -125,7 +125,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
         return peao;
     }
-
+    
     private Peca rainhaCapturou(Posicao inicio, Posicao fim) {
         int variacaoX = 0;
         int variacaoY = 0;
@@ -146,7 +146,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
         return tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()];// * passou por uma peça
     }
-
+    
     private boolean capturou(Posicao inicio, Posicao fim) {
         if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()] instanceof Dama) {
             return rainhaCapturou(inicio, fim) == null;
@@ -154,7 +154,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             return (inicio.getPosicaoX() - fim.getPosicaoX() >= 2) || (inicio.getPosicaoX() - fim.getPosicaoX() <= (-2));// * se moveu 2 casas e não é dama é porque capturou
         }
     }
-
+    
     private void capturaPeca(Posicao posicaoInicial, Posicao posicaoFinal) {
         Posicao posicaoCaptura = null;
         if (tabuleiro.getCasas()[posicaoInicial.getPosicaoX()][posicaoInicial.getPosicaoY()] instanceof Dama) {
@@ -180,9 +180,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             pecasCapturadas.add(pecaCapturada);//   * salvando na lista de peças capturadas
         }
     }
-
+    
     private void mover(Posicao inicio, Posicao fim) {
-
+        
         try {
             if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()] == null) {//    * não escolheu peça inicial
                 mover = false;
@@ -214,27 +214,31 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             validaFim();
             preenchePecasCapturadas();
             salvaMovimentos(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()], posicaoInicial, fim, pecaCapturada);
-
-            System.out.println(Arrays.toString(listaMovimentos.toArray()));
+            
+            if (continuarCapturando) {
+                montaPecas();
+                mostraJogadasPossiveis(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
+            }
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
             if (continuarCapturando) {
                 continuarCapturando = false;
                 trocaTurno();
             }
+            montaPecas();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void continuarCaptura() {
         if (continuarCapturando) {
-
+            
         }
     }
-
+    
     private void preenchePecasCapturadas() {
-
+        
         if (pecasCapturadas.isEmpty()) {
             return;
         }
@@ -264,7 +268,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         jLabel_peoesPretosCapturados.setText("Peões pretos capturados: " + peoesPretosCapturados);
         jLabel_damasPretasCapturadas.setText("Damas pretas capturadas: " + damasPretasCapturadas);
     }
-
+    
     private void trocaTurno() {
         if (turno == Cor.BRANCO) {
             jLabel_turno.setIcon(new ImageIcon("src/assets/peao_amarelo_fundo_preto.jpeg"));
@@ -274,7 +278,18 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             turno = Cor.BRANCO;
         }
     }
-
+    
+    private void mostraJogadasPossiveis(Peca peca) {
+        boolean[][] movimentosPossiveis = peca.movimentosPossiveis();
+        for (int i = 0; i < movimentosPossiveis.length; i++) {
+            for (int j = 0; j < movimentosPossiveis[i].length; j++) {
+                if (movimentosPossiveis[i][j]) {// * é um movimento possível
+                    listaBotoes.get((8 * i) + j).setIcon(new ImageIcon("src/assets/fundo_azul.jpeg"));
+                }
+            }
+        }
+    }
+    
     private void montaPecas() {
         mostraTabuleiro();
         Peca[][] casas = tabuleiro.getCasas();
@@ -300,9 +315,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         }
     }
-
+    
     private void preencheTabuleiro() {
-
+        
         try {
             tabuleiro.adicionaPeca(new Peao(7, 7, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 5, tabuleiro, Cor.BRANCO));
@@ -316,7 +331,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(5, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 1, tabuleiro, Cor.BRANCO));
-
+            
             tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
@@ -329,13 +344,13 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(2, 2, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 4, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
-
+            
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void loadBotoes() {
         Component[] compsPanel = jPanel1.getComponents();
         for (var c : compsPanel) {
@@ -345,7 +360,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         }
         Comparator c = (o1, o2) -> {
-
+            
             JButton bt1 = (JButton) o1;
             JButton bt2 = (JButton) o2;
             if (bt1.getLocation().getY() == bt2.getLocation().getY()) {// * mesma altura
@@ -354,12 +369,12 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 return (int) (bt1.getLocation().getY() - bt2.getLocation().getY());
             }
         };
-
+        
         listaBotoes.sort(c);
     }
-
+    
     private void mostraTabuleiro() {
-
+        
         String caminho1 = "src/assets/fundo_preto.jpeg";
         String caminho2 = "src/assets/fundo_branco.jpeg";
         for (int i = 0; i < listaBotoes.size(); i++) {
@@ -961,6 +976,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -971,6 +987,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -981,6 +998,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -991,6 +1009,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1001,6 +1020,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1011,6 +1031,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1021,6 +1042,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1031,6 +1053,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1041,6 +1064,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1051,6 +1075,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1061,6 +1086,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1071,6 +1097,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1081,6 +1108,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1091,6 +1119,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1101,6 +1130,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1111,6 +1141,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1121,6 +1152,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1131,6 +1163,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1141,6 +1174,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1151,6 +1185,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1161,6 +1196,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1171,6 +1207,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1181,6 +1218,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1191,6 +1229,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1201,6 +1240,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1211,6 +1251,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1221,6 +1262,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1231,6 +1273,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1241,6 +1284,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1251,6 +1295,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1261,6 +1306,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1271,6 +1317,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1281,6 +1328,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!mover) {
             posicaoInicial = PosicaoThis;
             mover = true;
+            mostraJogadasPossiveis(tabuleiro.getCasas()[PosicaoThis.getPosicaoX()][PosicaoThis.getPosicaoY()]);
         } else {
             mover(posicaoInicial, PosicaoThis);
         }
@@ -1305,21 +1353,21 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
+                    
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);

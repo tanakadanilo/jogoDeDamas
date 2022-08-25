@@ -23,7 +23,8 @@ public class Dama extends Peca {
         super(posicaoX, posicaoY, tabuleiro, cor);
     }
 
-    private boolean[][] movimentosPossiveis() {
+    @Override
+    public boolean[][] movimentosPossiveis() {
         boolean[][] movimentosPossiveis = new boolean[tabuleiro.getTamanhoVertical()][tabuleiro.getTamanhoHorizontal()];
         Posicao destino = null;
         int variacaoX = 1;
