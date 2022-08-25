@@ -133,15 +133,6 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jButton_e5" min="-2" pref="85" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jButton_e6" min="-2" pref="85" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jButton_e7" min="-2" pref="85" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jButton_e8" min="-2" pref="85" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
                                   <Component id="jButton_f5" min="-2" pref="85" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton_f6" min="-2" pref="85" max="-2" attributes="0"/>
@@ -159,7 +150,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton_g8" min="-2" pref="85" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jButton_a5" min="-2" pref="85" max="-2" attributes="0"/>
@@ -197,6 +188,15 @@
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jButton_d8" min="-2" pref="85" max="-2" attributes="0"/>
                                       </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="jButton_e5" min="-2" pref="85" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButton_e6" min="-2" pref="85" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButton_e7" min="-2" pref="85" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButton_e8" min="-2" pref="85" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -206,8 +206,11 @@
                                           <Component id="jLabel_turno" max="32767" attributes="0"/>
                                       </Group>
                                       <Component id="jLabel_peoesBrancosCapturados" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel_damasPretasCapturadas" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel_damasBrancasCapturadas" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                          <Component id="jToggleButton_desfazerJogada" min="-2" pref="127" max="-2" attributes="0"/>
+                                          <Component id="jLabel_damasPretasCapturadas" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -279,7 +282,7 @@
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jButton_d1" alignment="0" min="-2" pref="82" max="-2" attributes="0"/>
@@ -340,6 +343,8 @@
                           <Component id="jLabel_peoesPretosCapturados" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel_damasPretasCapturadas" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jToggleButton_desfazerJogada" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -606,6 +611,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Damas pretas capturadas: 0"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JToggleButton" name="jToggleButton_desfazerJogada">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Desfazer jogada"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton_desfazerJogadaActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

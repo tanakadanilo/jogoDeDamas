@@ -55,6 +55,14 @@ public abstract class Peca {
         this.p.setPosicaoY(posicaoY);
     }
 
+    public void desfazerMovimento(Posicao p) throws ExcecaoTabuleiro {
+        if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
+            throw new ExcecaoTabuleiro("A posição informada não existe");
+        }
+        tabuleiro.moverPeca(this, p);
+        this.p = p;
+    }
+
     public void mover(Posicao p) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");

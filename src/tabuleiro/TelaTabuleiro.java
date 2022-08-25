@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import jogo.ExcecaoRegraDoJogo;
+import jogo.Movimentos;
 
 /**
  *
@@ -27,6 +28,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     ArrayList<JButton> listaBotoes = new ArrayList<>();
     ArrayList<Peca> pecasCapturadas = new ArrayList<>();
+    ArrayList<Movimentos> listaMovimentos = new ArrayList<>();
     Tabuleiro tabuleiro = new Tabuleiro(8, 8);
     Peca pecaCapturada = null;
     boolean mover = false;
@@ -43,6 +45,33 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         loadBotoes();
         preencheTabuleiro();
         montaPecas();
+    }
+
+    private void desfazerMovimento() {
+        try {
+            if (listaMovimentos.isEmpty()) {//  * não foi feito nenhum movimento ainda
+                throw new ExcecaoRegraDoJogo("nenhuma jogada para ser desfeita... vc tá querendo trapacear de novo?");
+            }
+            Movimentos movimento = listaMovimentos.get(listaMovimentos.size() - 1);
+            Peca pecaMovida = movimento.getPecaMovida();
+            Peca pecaCapturada = movimento.getPecaCapturada();
+            if (pecaCapturada != null) {
+                tabuleiro.adicionaPeca(pecaCapturada);
+                pecasCapturadas.remove(pecaCapturada);
+            }
+            pecaMovida.desfazerMovimento(movimento.getInicio());
+            trocaTurno();
+            listaMovimentos.remove(movimento);
+        } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void salvaMovimentos(Peca pecaMovida, Posicao posicaoInicio, Posicao posicaoFinal, Peca pecaCapturada) {
+
+        Movimentos movimento = new Movimentos(pecaMovida, posicaoInicio, posicaoFinal, pecaCapturada);
+        listaMovimentos.add(movimento);
     }
 
     private void recomeçarPartida() {
@@ -184,6 +213,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             montaPecas();
             validaFim();
             preenchePecasCapturadas();
+            salvaMovimentos(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()], posicaoInicial, fim, pecaCapturada);
+
+            System.out.println(Arrays.toString(listaMovimentos.toArray()));
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
             if (continuarCapturando) {
@@ -420,6 +452,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         jLabel_peoesPretosCapturados = new javax.swing.JLabel();
         jLabel_damasBrancasCapturadas = new javax.swing.JLabel();
         jLabel_damasPretasCapturadas = new javax.swing.JLabel();
+        jToggleButton_desfazerJogada = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -633,6 +666,13 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
         jLabel_damasPretasCapturadas.setText("Damas pretas capturadas: 0");
 
+        jToggleButton_desfazerJogada.setText("Desfazer jogada");
+        jToggleButton_desfazerJogada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton_desfazerJogadaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -717,14 +757,6 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_e5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_e6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_e7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_e8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton_f5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton_f6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -773,7 +805,15 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton_d7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton_d8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jButton_d8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton_e5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton_e6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton_e7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton_e8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(51, 51, 51)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel_peoesPretosCapturados)
@@ -781,8 +821,10 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel_turno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addComponent(jLabel_peoesBrancosCapturados)
-                                    .addComponent(jLabel_damasPretasCapturadas)
-                                    .addComponent(jLabel_damasBrancasCapturadas))))))
+                                    .addComponent(jLabel_damasBrancasCapturadas)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jToggleButton_desfazerJogada, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel_damasPretasCapturadas)))))))
                 .addContainerGap(132, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -836,7 +878,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel_damasBrancasCapturadas)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton_d1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -890,7 +932,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel_peoesPretosCapturados)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel_damasPretasCapturadas)))
+                        .addComponent(jLabel_damasPretasCapturadas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jToggleButton_desfazerJogada)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1242,6 +1286,11 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_h8ActionPerformed
 
+    private void jToggleButton_desfazerJogadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_desfazerJogadaActionPerformed
+        desfazerMovimento();
+        montaPecas();
+    }//GEN-LAST:event_jToggleButton_desfazerJogadaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1359,5 +1408,6 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_peoesPretosCapturados;
     private javax.swing.JLabel jLabel_turno;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JToggleButton jToggleButton_desfazerJogada;
     // End of variables declaration//GEN-END:variables
 }
