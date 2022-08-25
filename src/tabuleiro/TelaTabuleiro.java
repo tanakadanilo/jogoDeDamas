@@ -10,7 +10,6 @@ import Pecas.Peao;
 import Pecas.Peca;
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -127,25 +126,16 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     }
 
     private Peca rainhaCapturou(Posicao inicio, Posicao fim) {
-        int variacaoX = 0;
-        int variacaoY = 0;
-        if (fim.getPosicaoX() - inicio.getPosicaoX() > 0) {//    * moveu pra baixo
-            variacaoX = -1;
-        } else {
-            variacaoX = 1;
+        int variacaoX = (fim.getPosicaoX() - inicio.getPosicaoX() > 0) ? -1 : 1;
+        int variacaoY = (fim.getPosicaoY() - inicio.getPosicaoY() > 0) ? -1 : 1;
+        Posicao capturada = new Posicao(fim.getPosicaoX() + variacaoX, fim.getPosicaoY() + variacaoY);//    * posicao da peça q foi capturada
+        while (tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()] == null//  * voltando por onde a rainha passou e procurando a peça capturada
+                && capturada.getPosicaoX() != inicio.getPosicaoX() && capturada.getPosicaoY() != inicio.getPosicaoY()) {//   * ainda não chegou na posição inicial
+            capturada.setPosicaoX(capturada.getPosicaoX() + variacaoX);
+            capturada.setPosicaoY(capturada.getPosicaoY() + variacaoY);
         }
-        if (fim.getPosicaoY() - inicio.getPosicaoY() > 0) {//    * moveu pra direita
-            variacaoY = -1;
-        } else {
-            variacaoY = 1;
-        }
-        Posicao capturada = new Posicao(fim.getPosicaoX() + variacaoX, fim.getPosicaoY() + variacaoY);//    * pposicao da peça q foi capturada
-        while (tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()] == null) {//  * voltando por onde a rainha passou e procurando a peça capturada
-            capturada.setPosicaoX(capturada.getPosicaoX() - variacaoX);
-            capturada.setPosicaoY(capturada.getPosicaoY() - variacaoY);
-        }
-        Peca pecaCAp = tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()];
-        return pecaCAp;// * passou por uma peça
+        Peca pecaCap = tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()];
+        return pecaCap;// * passou por uma peça
     }
 
     private boolean capturou(Peca pecaAtual, Posicao inicio, Posicao fim) {
@@ -182,52 +172,70 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }
 
+    private void continuarCapturando(Peca pecaSendoMovida, Posicao fim) throws ExcecaoRegraDoJogo, ExcecaoTabuleiro {
+        Posicao inicio = new Posicao(pecaSendoMovida.getPosicao().getPosicaoX(), pecaSendoMovida.getPosicao().getPosicaoY());
+// * salvando posição para caso tenha de desfazer o movimento
+        if (pecaSendoMovida == null) {
+            throw new IllegalStateException("A peça que acabou de fazer um movimento de captura, não existe");
+        }
+        if (pecaSendoMovida.getCor() != turno) {
+            throw new IllegalStateException("Tentando continuar capturando com umma peça que não é a do turno atual, peça sendo movida: " + pecaSendoMovida);
+        }
+        pecaSendoMovida.mover(fim);
+        this.mover = false;
+        if (!capturou(pecaSendoMovida, posicaoInicial, fim)) {//  * fez um movimento que não é de captura
+            pecaSendoMovida.desfazerMovimento(inicio);
+            throw new ExcecaoRegraDoJogo("Está tentando fazer capturas em sequencia, por isso só é permitido capturar peças adversárias, não podendo ser nenhum outro movimento");
+        }
+        capturaPeca(pecaSendoMovida, posicaoInicial, fim);
+    }
+
     private void mover(Posicao inicio, Posicao fim) {
 
         Peca pecaSendoMovida = tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()];
         try {
-            if (pecaSendoMovida == null) {//    * não escolheu peça inicial
-                mover = false;
-                throw new ExcecaoTabuleiro("Escolha a peça que deseja mover");
-            }
-            if (pecaSendoMovida.getCor() != turno) {
-                throw new ExcecaoRegraDoJogo("Não é a sua vez de jogar, tava querendo trapacear, né? safado");
-            }
-            pecaSendoMovida.mover(fim);
-            this.mover = false;
-            if (capturou(pecaSendoMovida, inicio, fim)) {
-                capturaPeca(pecaSendoMovida, posicaoInicial, fim);
-            } else {
-                pecaCapturada = null;
-                if (continuarCapturando) {//  * a jogada é continuar capturando peças em sequencia
-                    pecaSendoMovida.desfazerMovimento(inicio);
-                    throw new ExcecaoRegraDoJogo("Em uma captura em sequência, vc deve continuar capturando, não podendo fazer outro movimento");
+            if (continuarCapturando) {
+                continuarCapturando(pecaSendoMovida, fim);
+            } else {//  * movimento normal
+                if (pecaSendoMovida == null) {//    * não escolheu peça inicial
+                    mover = false;
+                    continuarCapturando = false;
+                    throw new ExcecaoTabuleiro("Escolha a peça que deseja mover");
+                }
+                if (pecaSendoMovida.getCor() != turno) {
+//  * talvez dê um bug de travar, mas acho q não, memso assim testar isso
+                    throw new ExcecaoRegraDoJogo("Não é a sua vez de jogar, tava querendo trapacear, né? safado");
+                }
+                pecaSendoMovida.mover(fim);
+                this.mover = false;
+                if (capturou(pecaSendoMovida, inicio, fim)) {
+                    capturaPeca(pecaSendoMovida, posicaoInicial, fim);
+                } else {//  * não capturou nenhuma peça
+                    pecaCapturada = null;
                 }
             }
             if (pecaCapturada != null && pecaSendoMovida.podeContinuarCapturando(fim)) {
-                posicaoInicial = pecaSendoMovida.getPosicao();
+                posicaoInicial = pecaSendoMovida.getPosicao();//    * manter movimentando a mesma peça
                 mover = true;
                 continuarCapturando = true;
             } else {//   * só trocar de turno se não puder continuar capturando
+                posicaoInicial = null;
+                mover = false;
                 continuarCapturando = false;
                 trocaTurno();
             }
-            tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(pecaSendoMovida);
+            tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(pecaSendoMovida);//   * ver se a peça  foi promovida
             montaPecas();
-            validaFim();
-            preenchePecasCapturadas();
             salvaMovimentos(pecaSendoMovida, posicaoInicial, fim, pecaCapturada);
+            preenchePecasCapturadas();
+            validaFim();
 
             if (continuarCapturando) {
-                montaPecas();
-                mostraJogadasPossiveis(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
+                mostraJogadasPossiveis(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);//   * mostrar novos movimentos possiveis
             }
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             mover = false;
-            if (continuarCapturando) {
-                continuarCapturando = false;
-                trocaTurno();
-            }
+            continuarCapturando = false;
             montaPecas();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);

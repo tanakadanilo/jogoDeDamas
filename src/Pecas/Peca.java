@@ -59,8 +59,8 @@ public abstract class Peca {
         if (!tabuleiro.posicaoExiste(p)) {// * posição não existe
             throw new ExcecaoTabuleiro("A posição informada não existe");
         }
-        tabuleiro.moverPeca(this, p);
         this.p = p;
+        tabuleiro.moverPeca(this, p);
     }
 
     public void mover(Posicao p) throws ExcecaoTabuleiro, ExcecaoRegraDoJogo {
