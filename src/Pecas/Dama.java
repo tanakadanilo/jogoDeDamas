@@ -113,17 +113,6 @@ public class Dama extends Peca {
     }
 
     public boolean podeCapturar(Posicao posicaoAtual, int variacaoX, int variacaoY) {
-//        for (var e : tabuleiro.getCasas()) {
-//            for (var r : e) {
-//                if (r == null) {
-//                    System.out.print("- " + "\t");
-//                } else {
-//
-//                    System.out.print(r.getClass() + "\t");
-//                }
-//            }
-//            System.out.println("");
-//        }
 
         Posicao aux = new Posicao(posicaoAtual.getPosicaoX(), posicaoAtual.getPosicaoY());
         aux.setPosicaoX(aux.getPosicaoX() + variacaoX);

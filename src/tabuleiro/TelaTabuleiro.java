@@ -25,7 +25,7 @@ import jogo.Movimentos;
  * @author tanak
  */
 public class TelaTabuleiro extends javax.swing.JFrame {
-    
+
     ArrayList<JButton> listaBotoes = new ArrayList<>();
     ArrayList<Peca> pecasCapturadas = new ArrayList<>();
     ArrayList<Movimentos> listaMovimentos = new ArrayList<>();
@@ -46,7 +46,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         preencheTabuleiro();
         montaPecas();
     }
-    
+
     private void desfazerMovimento() {
         try {
             if (listaMovimentos.isEmpty()) {//  * não foi feito nenhum movimento ainda
@@ -67,18 +67,18 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void salvaMovimentos(Peca pecaMovida, Posicao posicaoInicio, Posicao posicaoFinal, Peca pecaCapturada) {
-        
+
         Movimentos movimento = new Movimentos(pecaMovida, posicaoInicio, posicaoFinal, pecaCapturada);
         listaMovimentos.add(movimento);
     }
-    
+
     private void recomeçarPartida() {
         new TelaTabuleiro().setVisible(true);
         this.dispose();
     }
-    
+
     private void validaFim() {
         Peca[][] todasAsPecas = tabuleiro.getCasas();
         boolean brancoVivo = false;
@@ -107,9 +107,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             recomeçarPartida();
         }
     }
-    
+
     private Peca promover(Peca peao) {
-        
+
         if (peao == null) {
             return peao;
         }
@@ -125,7 +125,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
         return peao;
     }
-    
+
     private Peca rainhaCapturou(Posicao inicio, Posicao fim) {
         int variacaoX = 0;
         int variacaoY = 0;
@@ -144,24 +144,25 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             capturada.setPosicaoX(capturada.getPosicaoX() - variacaoX);
             capturada.setPosicaoY(capturada.getPosicaoY() - variacaoY);
         }
-        return tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()];// * passou por uma peça
+        Peca pecaCAp = tabuleiro.getCasas()[capturada.getPosicaoX()][capturada.getPosicaoY()];
+        return pecaCAp;// * passou por uma peça
     }
-    
-    private boolean capturou(Posicao inicio, Posicao fim) {
-        if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()] instanceof Dama) {
-            return rainhaCapturou(inicio, fim) == null;
-        } else {
+
+    private boolean capturou(Peca pecaAtual, Posicao inicio, Posicao fim) {
+        if (pecaAtual instanceof Dama) {
+            return rainhaCapturou(inicio, fim) != null;// pulou alguma peça enquanto andava
+        } else {//  * é um peão
             return (inicio.getPosicaoX() - fim.getPosicaoX() >= 2) || (inicio.getPosicaoX() - fim.getPosicaoX() <= (-2));// * se moveu 2 casas e não é dama é porque capturou
         }
     }
-    
-    private void capturaPeca(Posicao posicaoInicial, Posicao posicaoFinal) {
+
+    private void capturaPeca(Peca pecaAtual, Posicao posicaoInicial, Posicao posicaoFinal) {
         Posicao posicaoCaptura = null;
-        if (tabuleiro.getCasas()[posicaoInicial.getPosicaoX()][posicaoInicial.getPosicaoY()] instanceof Dama) {
+        if (pecaAtual instanceof Dama) {
             pecaCapturada = rainhaCapturou(posicaoInicial, posicaoFinal);// * salvando a peça como capturada
             posicaoCaptura = new Posicao(pecaCapturada.getPosicao().getPosicaoX(), pecaCapturada.getPosicao().getPosicaoY());
             tabuleiro.getCasas()[pecaCapturada.getPosicao().getPosicaoX()][pecaCapturada.getPosicao().getPosicaoY()] = null;//  * tirando peça do tabuleiro
-        } else {
+        } else {//  * é um peão
             int posicaoX = 0;
             int posicaoY = 0;
             if (posicaoFinal.getPosicaoX() - posicaoInicial.getPosicaoX() >= 2) {//    * moveu pra baixo
@@ -180,41 +181,43 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             pecasCapturadas.add(pecaCapturada);//   * salvando na lista de peças capturadas
         }
     }
-    
+
     private void mover(Posicao inicio, Posicao fim) {
-        
+
+        Peca pecaSendoMovida = tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()];
         try {
-            if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()] == null) {//    * não escolheu peça inicial
+            if (pecaSendoMovida == null) {//    * não escolheu peça inicial
                 mover = false;
                 throw new ExcecaoTabuleiro("Escolha a peça que deseja mover");
             }
-            if (tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].getCor() != turno) {
+            if (pecaSendoMovida.getCor() != turno) {
                 throw new ExcecaoRegraDoJogo("Não é a sua vez de jogar, tava querendo trapacear, né? safado");
             }
-            tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()].mover(fim);
+            pecaSendoMovida.mover(fim);
             this.mover = false;
-            if (capturou(inicio, fim)) {
-                capturaPeca(posicaoInicial, fim);
+            if (capturou(pecaSendoMovida, inicio, fim)) {
+                capturaPeca(pecaSendoMovida, posicaoInicial, fim);
             } else {
                 pecaCapturada = null;
                 if (continuarCapturando) {//  * a jogada é continuar capturando peças em sequencia
+                    pecaSendoMovida.desfazerMovimento(inicio);
                     throw new ExcecaoRegraDoJogo("Em uma captura em sequência, vc deve continuar capturando, não podendo fazer outro movimento");
                 }
             }
-            if (pecaCapturada != null && tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()].podeContinuarCapturando(fim)) {
-                posicaoInicial = tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()].getPosicao();
+            if (pecaCapturada != null && pecaSendoMovida.podeContinuarCapturando(fim)) {
+                posicaoInicial = pecaSendoMovida.getPosicao();
                 mover = true;
                 continuarCapturando = true;
             } else {//   * só trocar de turno se não puder continuar capturando
-                trocaTurno();
                 continuarCapturando = false;
+                trocaTurno();
             }
-            tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
+            tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(pecaSendoMovida);
             montaPecas();
             validaFim();
             preenchePecasCapturadas();
-            salvaMovimentos(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()], posicaoInicial, fim, pecaCapturada);
-            
+            salvaMovimentos(pecaSendoMovida, posicaoInicial, fim, pecaCapturada);
+
             if (continuarCapturando) {
                 montaPecas();
                 mostraJogadasPossiveis(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);
@@ -230,15 +233,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void continuarCaptura() {
-        if (continuarCapturando) {
-            
-        }
-    }
-    
+
     private void preenchePecasCapturadas() {
-        
+
         if (pecasCapturadas.isEmpty()) {
             return;
         }
@@ -268,7 +265,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         jLabel_peoesPretosCapturados.setText("Peões pretos capturados: " + peoesPretosCapturados);
         jLabel_damasPretasCapturadas.setText("Damas pretas capturadas: " + damasPretasCapturadas);
     }
-    
+
     private void trocaTurno() {
         if (turno == Cor.BRANCO) {
             jLabel_turno.setIcon(new ImageIcon("src/assets/peao_amarelo_fundo_preto.jpeg"));
@@ -278,7 +275,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             turno = Cor.BRANCO;
         }
     }
-    
+
     private void mostraJogadasPossiveis(Peca peca) {
         boolean[][] movimentosPossiveis = peca.movimentosPossiveis();
         for (int i = 0; i < movimentosPossiveis.length; i++) {
@@ -289,7 +286,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void montaPecas() {
         mostraTabuleiro();
         Peca[][] casas = tabuleiro.getCasas();
@@ -315,9 +312,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void preencheTabuleiro() {
-        
+
         try {
             tabuleiro.adicionaPeca(new Peao(7, 7, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(7, 5, tabuleiro, Cor.BRANCO));
@@ -331,7 +328,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(5, 5, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 3, tabuleiro, Cor.BRANCO));
             tabuleiro.adicionaPeca(new Peao(5, 1, tabuleiro, Cor.BRANCO));
-            
+
             tabuleiro.adicionaPeca(new Peao(0, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 2, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(0, 4, tabuleiro, Cor.PRETA));
@@ -342,15 +339,20 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 2, tabuleiro, Cor.PRETA));
-            tabuleiro.adicionaPeca(new Peao(2, 4, tabuleiro, Cor.PRETA));
-            tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
-            
+            tabuleiro.adicionaPeca(new Peao(3, 3, tabuleiro, Cor.PRETA));
+//            tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
+
+            Peca p = new Peao(0, 6, tabuleiro, Cor.BRANCO);
+            tabuleiro.adicionaPeca(p);
+            tabuleiro.getCasas()[p.getPosicao().getPosicaoX()][p.getPosicao().getPosicaoY()] = promover(p);
+            System.out.println(p.getClass());
+
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void loadBotoes() {
         Component[] compsPanel = jPanel1.getComponents();
         for (var c : compsPanel) {
@@ -360,7 +362,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
         }
         Comparator c = (o1, o2) -> {
-            
+
             JButton bt1 = (JButton) o1;
             JButton bt2 = (JButton) o2;
             if (bt1.getLocation().getY() == bt2.getLocation().getY()) {// * mesma altura
@@ -369,12 +371,12 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 return (int) (bt1.getLocation().getY() - bt2.getLocation().getY());
             }
         };
-        
+
         listaBotoes.sort(c);
     }
-    
+
     private void mostraTabuleiro() {
-        
+
         String caminho1 = "src/assets/fundo_preto.jpeg";
         String caminho2 = "src/assets/fundo_branco.jpeg";
         for (int i = 0; i < listaBotoes.size(); i++) {
@@ -1353,21 +1355,21 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(TelaTabuleiro.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
