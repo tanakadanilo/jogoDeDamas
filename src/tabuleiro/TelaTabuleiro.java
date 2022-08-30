@@ -61,8 +61,8 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             pecaMovida.desfazerMovimento(movimento.getInicio());
             listaMovimentos.remove(movimento);
             if (!listaMovimentos.isEmpty()) {
-                if (listaMovimentos.get(0).isCapturaEmSequencia()) {
-                    desfazerMovimento();
+                if (listaMovimentos.get(listaMovimentos.size() - 1).isCapturaEmSequencia()) {// * foi uma captura em sequencia
+                    desfazerMovimento();//  * desfazendo toda a captura em sequencia
                     return;
                 }
             }
