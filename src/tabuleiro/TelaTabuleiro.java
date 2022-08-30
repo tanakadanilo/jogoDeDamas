@@ -73,6 +73,15 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             mover = false;
             trocaTurno();
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
+            if (mover) {//    * soltou exceção enquanto movia
+                mover = false;
+                pecaCapturada = null;
+            }
+            if (continuarCapturando) {//  * deu erro em uma captura em sequencia
+                desfazerMovimento();
+                continuarCapturando = false;
+            }
+            montaPecas();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,8 +212,19 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     private void mover(Posicao inicio, Posicao fim) {
 
-        Peca pecaSendoMovida = tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()];
         try {
+            if (fim.equals(inicio)) {//   * cancelar movimento da peça
+                if (continuarCapturando) {
+                    desfazerMovimento();
+                    continuarCapturando = false;
+                    throw new ExcecaoRegraDoJogo("Quando captura, é obrigatório capturar todas as peças possíveis de serem capturadas");
+                }
+                pecaCapturada = null;
+                mover = false;
+                montaPecas();
+                return;
+            }
+            Peca pecaSendoMovida = tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()];
             if (continuarCapturando) {
                 continuarCapturando(pecaSendoMovida, fim);
             } else {//  * movimento normal
@@ -249,7 +269,6 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             if (mover) {//    * soltou exceção enquanto movia
                 mover = false;
-                pecaSendoMovida = null;
                 pecaCapturada = null;
             }
             if (continuarCapturando) {//  * deu erro em uma captura em sequencia

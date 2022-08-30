@@ -34,4 +34,31 @@ public class Posicao {
         this.posicaoY = posicaoY;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.posicaoX;
+        hash = 97 * hash + this.posicaoY;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Posicao other = (Posicao) obj;
+        if (this.posicaoX != other.posicaoX) {
+            return false;
+        }
+        return this.posicaoY == other.posicaoY;
+    }
+
+    
 }
