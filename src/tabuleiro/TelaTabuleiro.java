@@ -247,8 +247,15 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 mostraJogadasPossiveis(tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()]);//   * mostrar novos movimentos possiveis
             }
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
-            mover = false;
-            continuarCapturando = false;
+            if (mover) {//    * soltou exceção enquanto movia
+                mover = false;
+                pecaSendoMovida = null;
+                pecaCapturada = null;
+            }
+            if (continuarCapturando) {//  * deu erro em uma captura em sequencia
+                desfazerMovimento();
+                continuarCapturando = false;
+            }
             montaPecas();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
