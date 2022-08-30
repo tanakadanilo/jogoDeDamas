@@ -9,6 +9,8 @@ import Pecas.Dama;
 import Pecas.Peao;
 import Pecas.Peca;
 import java.awt.Component;
+import java.awt.Toolkit;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
@@ -44,6 +46,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         loadBotoes();
         preencheTabuleiro();
         montaTabuleiro();
+        jLabel_turno.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("peao_branco_fundo_preto.jpeg")));
     }
 
     private void desfazerMovimento() {
@@ -314,21 +317,29 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     }
 
     private void trocaTurno() {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource("peao_branco_fundo_preto.jpeg");
+        ImageIcon iconPeaoBranco = new ImageIcon(resource);
+        resource = classLoader.getResource("peao_amarelo_fundo_preto.jpeg");
+        ImageIcon iconPeaoPreto = new ImageIcon(resource);
         if (turno == Cor.BRANCO) {
-            jLabel_turno.setIcon(new ImageIcon("src/assets/peao_amarelo_fundo_preto.jpeg"));
+            jLabel_turno.setIcon(iconPeaoPreto);
             turno = Cor.PRETA;
         } else {
-            jLabel_turno.setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto.jpeg"));
+            jLabel_turno.setIcon(iconPeaoBranco);
             turno = Cor.BRANCO;
         }
     }
 
     private void mostraJogadasPossiveis(Peca peca) {
         boolean[][] movimentosPossiveis = peca.movimentosPossiveis();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource("fundo_azul.jpeg");
+        ImageIcon iconFundoAzul = new ImageIcon(resource);
         for (int i = 0; i < movimentosPossiveis.length; i++) {
             for (int j = 0; j < movimentosPossiveis[i].length; j++) {
                 if (movimentosPossiveis[i][j]) {// * é um movimento possível
-                    listaBotoes.get((8 * i) + j).setIcon(new ImageIcon("src/assets/fundo_azul.jpeg"));
+                    listaBotoes.get((8 * i) + j).setIcon(iconFundoAzul);
                 }
             }
         }
@@ -337,22 +348,31 @@ public class TelaTabuleiro extends javax.swing.JFrame {
     private void montaTabuleiro() {
         carregaTabuleiro();
         Peca[][] casas = tabuleiro.getCasas();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource("peao_branco_fundo_preto.jpeg");
+        ImageIcon iconPeaoBranco = new ImageIcon(resource);
+        resource = classLoader.getResource("peao_amarelo_fundo_preto.jpeg");
+        ImageIcon iconPeaoPreto = new ImageIcon(resource);
+        resource = classLoader.getResource("dama_branca_fundo_preto.jpeg");
+        ImageIcon iconDamaBranca = new ImageIcon(resource);
+        resource = classLoader.getResource("dama_amarela_fundo_preto.jpeg");
+        ImageIcon iconDamaPretas = new ImageIcon(resource);
         for (var linha : casas) {
             for (var casa : linha) {//  * percorrendo todo o tabuleiro
                 if (casa != null) {//   * casa não vazia
                     if (casa.getCor() == Cor.BRANCO) {
                         Posicao p = casa.getPosicao();
                         if (casa instanceof Peao) {
-                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peao_branco_fundo_preto.jpeg"));
+                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(iconPeaoBranco);
                         } else {//    * é uma dama
-                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/dama_branca_fundo_preto.jpeg"));
+                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(iconDamaBranca);
                         }
                     } else {
                         Posicao p = casa.getPosicao();
                         if (casa instanceof Peao) {
-                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/peao_amarelo_fundo_preto.jpeg"));
+                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(iconPeaoPreto);
                         } else {//    * é uma dama
-                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(new ImageIcon("src/assets/dama_amarela_fundo_preto.jpeg"));
+                            listaBotoes.get(((p.getPosicaoX() * 8) + p.getPosicaoY())).setIcon(iconDamaPretas);
                         }
                     }
                 }
@@ -397,10 +417,13 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     private void loadBotoes() {
         Component[] compsPanel = jPanel1.getComponents();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource("fundo_preto.jpeg");
+        ImageIcon iconFundoPreto = new ImageIcon(resource);
         for (var c : compsPanel) {
             if (c instanceof JButton jButton) {
                 listaBotoes.add(jButton);
-                jButton.setIcon(new javax.swing.ImageIcon("src/assets/fundo_preto.jpeg"));
+                jButton.setIcon(iconFundoPreto);
             }
         }
         Comparator c = (o1, o2) -> {
@@ -419,15 +442,20 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     private void carregaTabuleiro() {
 
-        String caminho1 = "src/assets/fundo_preto.jpeg";
-        String caminho2 = "src/assets/fundo_branco.jpeg";
+        String caminho1 = "fundo_preto.jpeg";
+        String caminho2 = "fundo_branco.jpeg";
         for (int i = 0; i < listaBotoes.size(); i++) {
             if (i % 8 != 0) {
                 String aux = caminho1;
                 caminho1 = caminho2;
                 caminho2 = aux;
             }
-            listaBotoes.get(i).setIcon(new javax.swing.ImageIcon(caminho1));
+//            listaBotoes.get(i).setIcon(new javax.swing.ImageIcon(caminho1));
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            URL resource = classLoader.getResource(caminho1);
+            ImageIcon icon = new ImageIcon(resource);
+            listaBotoes.get(i).setIcon(icon);
+
         }
     }
 
@@ -714,8 +742,6 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Vez do jogador:");
-
-        jLabel_turno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/peao_branco_fundo_preto.jpeg"))); // NOI18N
 
         jLabel_peoesBrancosCapturados.setText("Peões brancos capturados: 0");
 

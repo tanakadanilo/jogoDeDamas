@@ -586,11 +586,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_turno">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/assets/peao_branco_fundo_preto.jpeg"/>
-            </Property>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel_peoesBrancosCapturados">
           <Properties>
