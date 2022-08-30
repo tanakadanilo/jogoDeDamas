@@ -59,8 +59,19 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 pecasCapturadas.remove(pecaCapturada);
             }
             pecaMovida.desfazerMovimento(movimento.getInicio());
-            trocaTurno();
             listaMovimentos.remove(movimento);
+            if (!listaMovimentos.isEmpty()) {
+                if (listaMovimentos.get(0).isCapturaEmSequencia()) {
+                    desfazerMovimento();
+                    return;
+                }
+            }
+            if (continuarCapturando) {//    * desfez a jogada sem ter continuado a captura
+                trocaTurno();// * moveu sem ter trocado de turno, pois não terminou de capturar em sequencia
+                continuarCapturando = false;
+            }
+            mover = false;
+            trocaTurno();
         } catch (ExcecaoTabuleiro | ExcecaoRegraDoJogo ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,7 +80,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     private void salvaMovimentos(Peca pecaMovida, Posicao posicaoInicio, Posicao posicaoFinal, Peca pecaCapturada) {
 
-        Movimentos movimento = new Movimentos(pecaMovida, posicaoInicio, posicaoFinal, pecaCapturada);
+        Movimentos movimento = new Movimentos(pecaMovida, posicaoInicio, posicaoFinal, pecaCapturada, continuarCapturando);
         listaMovimentos.add(movimento);
     }
 
@@ -203,10 +214,11 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                     throw new ExcecaoTabuleiro("Escolha a peça que deseja mover");
                 }
                 if (pecaSendoMovida.getCor() != turno) {
-//  * talvez dê um bug de travar, mas acho q não, memso assim testar isso
+                    mover = false;
+                    continuarCapturando = false;
                     throw new ExcecaoRegraDoJogo("Não é a sua vez de jogar, tava querendo trapacear, né? safado");
                 }
-                pecaSendoMovida.mover(fim);
+                pecaSendoMovida.mover(fim);//   * movendo peça atual
                 this.mover = false;
                 if (capturou(pecaSendoMovida, inicio, fim)) {
                     capturaPeca(pecaSendoMovida, posicaoInicial, fim);
@@ -218,15 +230,16 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 posicaoInicial = pecaSendoMovida.getPosicao();//    * manter movimentando a mesma peça
                 mover = true;
                 continuarCapturando = true;
+                trocaTurno();
             } else {//   * só trocar de turno se não puder continuar capturando
                 posicaoInicial = null;
                 mover = false;
                 continuarCapturando = false;
-                trocaTurno();
             }
+            trocaTurno();
             tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(pecaSendoMovida);//   * ver se a peça  foi promovida
             montaPecas();
-            salvaMovimentos(pecaSendoMovida, posicaoInicial, fim, pecaCapturada);
+            salvaMovimentos(pecaSendoMovida, inicio, fim, pecaCapturada);
             preenchePecasCapturadas();
             validaFim();
 

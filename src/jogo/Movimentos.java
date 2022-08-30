@@ -17,44 +17,34 @@ public class Movimentos {
     protected Posicao inicio;
     protected Posicao fim;
     Pecas.Peca pecaCapturada;
+    boolean capturaEmSequencia;
 
-    public Movimentos(Peca pecaMovida, Posicao inicio, Posicao fim, Peca pecaCapturada) {
+    public Movimentos(Peca pecaMovida, Posicao inicio, Posicao fim, Peca pecaCapturada, boolean capturaEmSequencia) {
         this.pecaMovida = pecaMovida;
         this.inicio = inicio;
         this.fim = fim;
         this.pecaCapturada = pecaCapturada;
+        this.capturaEmSequencia = capturaEmSequencia;
     }
 
     public Peca getPecaMovida() {
         return pecaMovida;
     }
 
-    public void setPecaMovida(Peca pecaMovida) {
-        this.pecaMovida = pecaMovida;
-    }
-
     public Posicao getInicio() {
         return inicio;
-    }
-
-    public void setInicio(Posicao inicio) {
-        this.inicio = inicio;
     }
 
     public Posicao getFim() {
         return fim;
     }
 
-    public void setFim(Posicao fim) {
-        this.fim = fim;
-    }
-
     public Peca getPecaCapturada() {
         return pecaCapturada;
     }
 
-    public void setPecaCapturada(Peca pecaCapturada) {
-        this.pecaCapturada = pecaCapturada;
+    public boolean isCapturaEmSequencia() {
+        return capturaEmSequencia;
     }
 
 }
