@@ -43,7 +43,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         initComponents();
         loadBotoes();
         preencheTabuleiro();
-        montaPecas();
+        montaTabuleiro();
     }
 
     private void desfazerMovimento() {
@@ -81,7 +81,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 desfazerMovimento();
                 continuarCapturando = false;
             }
-            montaPecas();
+            montaTabuleiro();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,9 +119,9 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         if (!manterJogo) {//  * acabou a partida
 
             if (!brancoVivo) {
-                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador branco perdeu :(");
+                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador Preto venceu ;)");
             } else {
-                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador preto perdeu :(");
+                JOptionPane.showMessageDialog(rootPane, "O jogo acabou! O jogador Brancos perdeu ;)");
             }
             recomeçarPartida();
         }
@@ -221,7 +221,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 }
                 pecaCapturada = null;
                 mover = false;
-                montaPecas();
+                montaTabuleiro();
                 return;
             }
             Peca pecaSendoMovida = tabuleiro.getCasas()[inicio.getPosicaoX()][inicio.getPosicaoY()];
@@ -258,7 +258,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             }
             trocaTurno();
             tabuleiro.getCasas()[fim.getPosicaoX()][fim.getPosicaoY()] = promover(pecaSendoMovida);//   * ver se a peça  foi promovida
-            montaPecas();
+            montaTabuleiro();
             salvaMovimentos(pecaSendoMovida, inicio, fim, pecaCapturada);
             preenchePecasCapturadas();
             validaFim();
@@ -275,7 +275,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
                 desfazerMovimento();
                 continuarCapturando = false;
             }
-            montaPecas();
+            montaTabuleiro();
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(TelaTabuleiro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -334,8 +334,8 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         }
     }
 
-    private void montaPecas() {
-        mostraTabuleiro();
+    private void montaTabuleiro() {
+        carregaTabuleiro();
         Peca[][] casas = tabuleiro.getCasas();
         for (var linha : casas) {
             for (var casa : linha) {//  * percorrendo todo o tabuleiro
@@ -386,13 +386,8 @@ public class TelaTabuleiro extends javax.swing.JFrame {
             tabuleiro.adicionaPeca(new Peao(1, 7, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 0, tabuleiro, Cor.PRETA));
             tabuleiro.adicionaPeca(new Peao(2, 2, tabuleiro, Cor.PRETA));
-            tabuleiro.adicionaPeca(new Peao(3, 3, tabuleiro, Cor.PRETA));
-//            tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
-
-            Peca p = new Peao(0, 6, tabuleiro, Cor.BRANCO);
-            tabuleiro.adicionaPeca(p);
-            tabuleiro.getCasas()[p.getPosicao().getPosicaoX()][p.getPosicao().getPosicaoY()] = promover(p);
-            System.out.println(p.getClass());
+            tabuleiro.adicionaPeca(new Peao(2, 4, tabuleiro, Cor.PRETA));
+            tabuleiro.adicionaPeca(new Peao(2, 6, tabuleiro, Cor.PRETA));
 
         } catch (ExcecaoTabuleiro ex) {
             Logger.getLogger(TelaTabuleiro.class
@@ -422,7 +417,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
         listaBotoes.sort(c);
     }
 
-    private void mostraTabuleiro() {
+    private void carregaTabuleiro() {
 
         String caminho1 = "src/assets/fundo_preto.jpeg";
         String caminho2 = "src/assets/fundo_branco.jpeg";
@@ -1385,7 +1380,7 @@ public class TelaTabuleiro extends javax.swing.JFrame {
 
     private void jToggleButton_desfazerJogadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton_desfazerJogadaActionPerformed
         desfazerMovimento();
-        montaPecas();
+        montaTabuleiro();
     }//GEN-LAST:event_jToggleButton_desfazerJogadaActionPerformed
 
     /**
